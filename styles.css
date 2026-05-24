@@ -16,11 +16,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Mobile hero typography tightening */
-@media (max-width: 480px) {
+/* Mobile hero typography — fluid scaling so "Omega Sequence" never overflows */
+@media (max-width: 640px) {
   h1.font-display {
-    font-size: 2.5rem !important;
+    font-size: clamp(1.85rem, 8.5vw, 3rem) !important;
     line-height: 1.05 !important;
+    letter-spacing: -0.02em;
   }
 }
 
