@@ -2,6 +2,11 @@
    Omega Sequence — custom styles
    ===================================================== */
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -9,6 +14,14 @@ html {
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Mobile hero typography tightening */
+@media (max-width: 480px) {
+  h1.font-display {
+    font-size: 2.5rem !important;
+    line-height: 1.05 !important;
+  }
 }
 
 /* Subtle grid background */
