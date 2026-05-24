@@ -1,0 +1,260 @@
+/* =====================================================
+   Omega Sequence — custom styles
+   ===================================================== */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle grid background */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at center, black 35%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 35%, transparent 80%);
+}
+
+/* Film grain noise */
+.noise-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Navbar scrolled state */
+#navbar.scrolled {
+  background: rgba(5, 6, 10, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Marquee */
+.marquee {
+  position: relative;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 3rem;
+  animation: scroll-marquee 40s linear infinite;
+}
+
+.marquee-item {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.25);
+  white-space: nowrap;
+  transition: color 0.3s;
+}
+
+.marquee-item:hover {
+  color: rgba(76, 246, 184, 0.6);
+}
+
+@keyframes scroll-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Module buttons */
+.mod-btn.active {
+  background: linear-gradient(135deg, rgba(30, 229, 156, 0.08), rgba(255, 255, 255, 0.04));
+  border-color: rgba(30, 229, 156, 0.35);
+  box-shadow: 0 8px 30px -10px rgba(30, 229, 156, 0.3);
+}
+
+.mod-btn.active .font-mono {
+  color: #4cf6b8 !important;
+}
+
+.mod-btn.active i[data-lucide="chevron-right"] {
+  color: #4cf6b8;
+  transform: translateX(2px);
+}
+
+.mod-btn i[data-lucide="chevron-right"] {
+  transition: transform 0.2s, color 0.2s;
+}
+
+/* FAQ details */
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary {
+  user-select: none;
+}
+
+.faq[open] {
+  background: rgba(255, 255, 255, 0.035);
+  border-color: rgba(30, 229, 156, 0.2);
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* =========================================
+   Before / After comparison slider
+   ========================================= */
+.compare {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 8.2; /* matches TradingView screenshots */
+  overflow: hidden;
+  cursor: ew-resize;
+  background: #0a0b12;
+  touch-action: none;
+}
+
+.compare-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.compare-top {
+  clip-path: inset(0 50% 0 0);
+  -webkit-clip-path: inset(0 50% 0 0);
+  will-change: clip-path;
+}
+
+.compare-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: linear-gradient(180deg,
+    rgba(76, 246, 184, 0.1) 0%,
+    rgba(76, 246, 184, 0.9) 20%,
+    rgba(76, 246, 184, 0.9) 80%,
+    rgba(76, 246, 184, 0.1) 100%);
+  transform: translateX(-50%);
+  pointer-events: none;
+  box-shadow: 0 0 16px rgba(30, 229, 156, 0.5);
+}
+
+.compare-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #4cf6b8 0%, #00c281 100%);
+  border: 3px solid #05060a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: #05060a;
+  cursor: grab;
+  pointer-events: auto;
+  box-shadow:
+    0 0 0 1px rgba(76, 246, 184, 0.5),
+    0 8px 24px -4px rgba(30, 229, 156, 0.6),
+    0 0 40px rgba(30, 229, 156, 0.4);
+  transition: transform 0.15s, box-shadow 0.2s;
+  z-index: 5;
+}
+
+.compare-handle:hover {
+  transform: translate(-50%, -50%) scale(1.06);
+  box-shadow:
+    0 0 0 1px rgba(76, 246, 184, 0.7),
+    0 10px 30px -4px rgba(30, 229, 156, 0.8),
+    0 0 60px rgba(30, 229, 156, 0.55);
+}
+
+.compare-handle:active,
+.compare.dragging .compare-handle {
+  cursor: grabbing;
+  transform: translate(-50%, -50%) scale(0.96);
+}
+
+.compare-handle i {
+  pointer-events: none;
+}
+
+.compare-fallback {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(30, 229, 156, 0.04), transparent);
+}
+
+.compare.img-missing .compare-fallback { display: flex; }
+.compare.img-missing .compare-clip,
+.compare.img-missing .compare-divider,
+.compare.img-missing .compare-handle { display: none; }
+
+@media (max-width: 640px) {
+  .compare-handle { width: 44px; height: 44px; }
+}
+
+/* Highlight gradient text rendering fix */
+.bg-clip-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* AOS fine-tuning */
+[data-aos] {
+  pointer-events: none;
+}
+[data-aos].aos-animate {
+  pointer-events: auto;
+}
+
+/* Selection sweep on hero headline (subtle shimmer) */
+@keyframes shimmer-text {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Mobile tightening */
+@media (max-width: 640px) {
+  .marquee-item { font-size: 1.1rem; }
+}
