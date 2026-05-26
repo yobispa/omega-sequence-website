@@ -22,6 +22,94 @@ const onScroll = () => {
 window.addEventListener('scroll', onScroll, { passive: true });
 onScroll();
 
+/* ---------- GDPR cookie consent banner ---------- */
+(function cookieBanner() {
+  const banner = document.getElementById('cookieBanner');
+  if (!banner) return;
+
+  // If user already chose, do nothing
+  if (localStorage.getItem('cookieConsent')) return;
+
+  // Reveal after a short delay so the user can see the hero first
+  setTimeout(() => {
+    banner.classList.remove('hidden');
+    // Force a reflow before adding the show class so the transition fires
+    void banner.offsetWidth;
+    banner.classList.add('cookie-show');
+  }, 1200);
+
+  function dismiss(value) {
+    localStorage.setItem('cookieConsent', value);
+    localStorage.setItem('cookieConsentDate', new Date().toISOString());
+    banner.classList.remove('cookie-show');
+    banner.classList.add('cookie-hide');
+    setTimeout(() => banner.classList.add('hidden'), 450);
+  }
+
+  const accept    = document.getElementById('cookieAccept');
+  const necessary = document.getElementById('cookieNecessary');
+  if (accept)    accept.addEventListener('click', () => dismiss('all'));
+  if (necessary) necessary.addEventListener('click', () => dismiss('necessary'));
+})();
+
+/* ---------- First-scroll Omega rain ---------- */
+(function omegaRain() {
+  // Respect reduced-motion users
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  function spawn() {
+    const layer = document.createElement('div');
+    layer.className = 'omega-rain';
+    layer.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(layer);
+
+    const COUNT = window.innerWidth < 640 ? 28 : 55;
+    const longest = { ms: 0 };
+
+    for (let i = 0; i < COUNT; i++) {
+      const drop = document.createElement('span');
+      drop.className = 'omega-drop';
+      drop.textContent = 'Ω';
+
+      const xPct       = Math.random() * 100;                          // 0–100 vw
+      const size       = 14 + Math.random() * 48;                      // 14–62 px
+      const duration   = 3.2 + Math.random() * 3.5;                    // 3.2–6.7 s
+      const delay      = Math.random() * 2.2;                          // 0–2.2 s
+      const rotation   = (Math.random() > 0.5 ? 1 : -1) * (180 + Math.random() * 540);
+      const drift      = (Math.random() - 0.5) * 180;                  // ±90 px sideways
+      const peakOp     = 0.45 + Math.random() * 0.5;                   // 0.45–0.95
+      const blur       = Math.random() < 0.25 ? Math.random() * 1.5 : 0;
+
+      drop.style.left            = xPct + 'vw';
+      drop.style.fontSize        = size + 'px';
+      drop.style.animationDuration = duration + 's';
+      drop.style.animationDelay  = delay + 's';
+      drop.style.setProperty('--drift',        drift + 'px');
+      drop.style.setProperty('--rotation',     rotation + 'deg');
+      drop.style.setProperty('--peak-opacity', peakOp);
+      if (blur) drop.style.filter = `blur(${blur}px)`;
+
+      layer.appendChild(drop);
+
+      const finishMs = (delay + duration) * 1000;
+      if (finishMs > longest.ms) longest.ms = finishMs;
+    }
+
+    // Clean the DOM up once the last drop finishes
+    setTimeout(() => layer.remove(), longest.ms + 250);
+  }
+
+  let triggered = false;
+  function onFirstScroll() {
+    if (triggered) return;
+    if (window.scrollY < 30) return; // ignore micro-scrolls / overscroll bounces
+    triggered = true;
+    window.removeEventListener('scroll', onFirstScroll);
+    spawn();
+  }
+  window.addEventListener('scroll', onFirstScroll, { passive: true });
+})();
+
 /* ---------- Before / After image comparison slider ---------- */
 (function compareSlider() {
   const slider = document.getElementById('compareSlider');
@@ -378,7 +466,12 @@ const i18n = {
     'cta.primary':   'Schrijf je nu in',
     'cta.secondary': 'Bekijk volledig curriculum',
 
-    'footer.copy': "© 2026 Omega Sequence. Trading brengt risico's met zich mee. Resultaten uit het verleden zijn geen garantie voor de toekomst."
+    'footer.copy': "© 2026 Omega Sequence. Trading brengt risico's met zich mee. Resultaten uit het verleden zijn geen garantie voor de toekomst.",
+
+    'cookie.title':     'We respecteren je privacy',
+    'cookie.body':      'We gebruiken alleen essentiële cookies om de site te laten werken. Met jouw toestemming gebruiken we anonieme analyses om de site te verbeteren. Je keuze is op elk moment in te trekken.',
+    'cookie.necessary': 'Alleen noodzakelijk',
+    'cookie.accept':    'Alles accepteren'
   },
   en: {
     'nav.curriculum': 'Curriculum',
@@ -506,7 +599,12 @@ const i18n = {
     'cta.primary':   'Enroll now',
     'cta.secondary': 'See full curriculum',
 
-    'footer.copy': '© 2026 Omega Sequence. Trading involves risk. Past performance is not indicative of future results.'
+    'footer.copy': '© 2026 Omega Sequence. Trading involves risk. Past performance is not indicative of future results.',
+
+    'cookie.title':     'We respect your privacy',
+    'cookie.body':      'We only use essential cookies to make the site work. With your consent we use anonymous analytics to improve it. You can withdraw your choice at any time.',
+    'cookie.necessary': 'Necessary only',
+    'cookie.accept':    'Accept all'
   }
 };
 

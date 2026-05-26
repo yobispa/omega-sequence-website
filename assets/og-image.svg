@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#05060a"/>
+      <stop offset="100%" stop-color="#0a0b12"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0.78" cy="0.2" r="0.55">
+      <stop offset="0%" stop-color="#1ee59c" stop-opacity="0.55"/>
+      <stop offset="60%" stop-color="#1ee59c" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#1ee59c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0.12" cy="0.85" r="0.5">
+      <stop offset="0%" stop-color="#f5a524" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#f5a524" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="omegaGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4cf6b8"/>
+      <stop offset="100%" stop-color="#009868"/>
+    </linearGradient>
+    <linearGradient id="textHighlight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4cf6b8"/>
+      <stop offset="100%" stop-color="#009868"/>
+    </linearGradient>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M 64 0 L 0 0 0 64" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glowA)"/>
+  <rect width="1200" height="630" fill="url(#glowB)"/>
+
+  <!-- Logo mark + brand -->
+  <g transform="translate(80, 80)">
+    <rect width="56" height="56" rx="14" fill="url(#omegaGrad)"/>
+    <text x="28" y="40" text-anchor="middle"
+          font-family="'Space Grotesk', system-ui, sans-serif"
+          font-size="34" font-weight="700" fill="#05060a">Ω</text>
+    <text x="76" y="36" font-family="'Space Grotesk', system-ui, sans-serif"
+          font-size="24" font-weight="600" fill="#ffffff" letter-spacing="-0.5">Omega Sequence</text>
+  </g>
+
+  <!-- Cohort badge -->
+  <g transform="translate(80, 180)">
+    <rect width="280" height="36" rx="18" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.1)"/>
+    <circle cx="22" cy="18" r="4" fill="#1ee59c"/>
+    <text x="38" y="24" font-family="'JetBrains Mono', monospace"
+          font-size="12" font-weight="500" fill="rgba(255,255,255,0.8)"
+          letter-spacing="1.2">COHORT 04 — ENROLLMENT OPEN</text>
+  </g>
+
+  <!-- Headline -->
+  <text x="80" y="305"
+        font-family="'Space Grotesk', system-ui, sans-serif"
+        font-size="72" font-weight="600" fill="#ffffff" letter-spacing="-2">Trade with the</text>
+  <text x="80" y="385"
+        font-family="'Space Grotesk', system-ui, sans-serif"
+        font-size="72" font-weight="600" fill="url(#textHighlight)" letter-spacing="-2">Omega Sequence.</text>
+
+  <!-- Subline -->
+  <text x="80" y="445"
+        font-family="'Inter', system-ui, sans-serif"
+        font-size="22" font-weight="400" fill="rgba(255,255,255,0.65)">Private mentorship · DR / IDR fundamentals · 7-phase delivery framework</text>
+
+  <!-- Stat row -->
+  <g transform="translate(80, 510)">
+    <text x="0" y="0" font-family="'Space Grotesk', sans-serif" font-size="32" font-weight="600" fill="#4cf6b8">1,240+</text>
+    <text x="0" y="28" font-family="'Inter', sans-serif" font-size="14" fill="rgba(255,255,255,0.5)">mentored traders</text>
+
+    <text x="240" y="0" font-family="'Space Grotesk', sans-serif" font-size="32" font-weight="600" fill="#4cf6b8">82%</text>
+    <text x="240" y="28" font-family="'Inter', sans-serif" font-size="14" fill="rgba(255,255,255,0.5)">reach prop funded</text>
+
+    <text x="460" y="0" font-family="'Space Grotesk', sans-serif" font-size="32" font-weight="600" fill="#4cf6b8">8 weeks</text>
+    <text x="460" y="28" font-family="'Inter', sans-serif" font-size="14" fill="rgba(255,255,255,0.5)">structured program</text>
+  </g>
+
+  <!-- Decorative big Ω -->
+  <text x="1040" y="480" text-anchor="middle"
+        font-family="'Space Grotesk', system-ui, sans-serif"
+        font-size="440" font-weight="700" fill="url(#omegaGrad)" opacity="0.9">Ω</text>
+</svg>

@@ -2,6 +2,63 @@
    Omega Sequence — custom styles
    ===================================================== */
 
+/* =========================================
+   Cookie consent banner
+   ========================================= */
+#cookieBanner {
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
+  transform: translateY(120%);
+  opacity: 0;
+}
+
+#cookieBanner.cookie-show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+#cookieBanner.cookie-hide {
+  transform: translateY(120%);
+  opacity: 0;
+}
+
+/* =========================================
+   First-scroll Omega rain (one-shot effect)
+   ========================================= */
+.omega-rain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  overflow: hidden;
+}
+
+.omega-drop {
+  position: absolute;
+  top: -80px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  color: #4cf6b8;
+  text-shadow:
+    0 0 8px rgba(30, 229, 156, 0.55),
+    0 0 24px rgba(30, 229, 156, 0.25);
+  user-select: none;
+  will-change: transform, opacity;
+  animation: omegaFall linear forwards;
+  --drift: 0px;
+  --rotation: 360deg;
+}
+
+@keyframes omegaFall {
+  0%   { transform: translate3d(0, 0, 0) rotate(0); opacity: 0; }
+  8%   { opacity: var(--peak-opacity, 0.85); }
+  88%  { opacity: var(--peak-opacity, 0.85); }
+  100% { transform: translate3d(var(--drift), calc(100vh + 120px), 0) rotate(var(--rotation)); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .omega-rain { display: none; }
+}
+
 html, body {
   overflow-x: hidden;
   max-width: 100vw;
