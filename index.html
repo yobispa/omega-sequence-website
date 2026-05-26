@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -79,6 +79,9 @@
   <!-- AOS animation library -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
+  <!-- Flag icons (for the language dropdown) -->
+  <link href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css" rel="stylesheet">
+
   <!-- Lucide icons -->
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
@@ -106,25 +109,56 @@
       </a>
 
       <nav class="hidden md:flex items-center gap-8 text-sm text-white/70">
-        <a href="#curriculum" class="hover:text-white transition">Curriculum</a>
-        <a href="#mentor" class="hover:text-white transition">Mentor</a>
-        <a href="#pricing" class="hover:text-white transition">Pricing</a>
-        <a href="#faq" class="hover:text-white transition">FAQ</a>
+        <a href="#curriculum" class="hover:text-white transition" data-i18n="nav.curriculum">Curriculum</a>
+        <a href="#mentor"     class="hover:text-white transition" data-i18n="nav.mentor">Mentor</a>
+        <a href="#pricing"    class="hover:text-white transition" data-i18n="nav.pricing">Prijzen</a>
+        <a href="#faq"        class="hover:text-white transition" data-i18n="nav.faq">FAQ</a>
       </nav>
 
-      <!-- Whop link goes here later; for now scrolls to pricing -->
-      <a href="#pricing" class="inline-flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium bg-white text-ink-900 hover:bg-omega-300 transition px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg shadow-lg shadow-black/30 shrink-0">
-        Enroll
-        <i data-lucide="arrow-right" class="h-3.5 w-3.5 sm:h-4 sm:w-4"></i>
-      </a>
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        <!-- Language dropdown -->
+        <div class="relative" id="langSwitcher">
+          <button id="langToggle" type="button"
+                  class="inline-flex items-center gap-1.5 sm:gap-2 text-xs font-mono uppercase tracking-wider text-white/85 hover:text-white border border-white/10 hover:border-white/25 bg-white/[0.04] hover:bg-white/[0.08] transition px-2 sm:px-2.5 py-1.5 rounded-lg"
+                  aria-haspopup="listbox" aria-expanded="false" aria-label="Taal kiezen">
+            <span id="langToggleFlag" class="fi fi-nl rounded-[2px] !h-3.5 !w-5"></span>
+            <span id="langToggleLabel">NL</span>
+            <i data-lucide="chevron-down" id="langToggleChevron" class="h-3 w-3 transition-transform"></i>
+          </button>
+
+          <div id="langMenu"
+               class="hidden absolute right-0 mt-2 w-40 rounded-xl border border-white/10 bg-ink-800/95 backdrop-blur shadow-2xl shadow-black/50 overflow-hidden z-50"
+               role="listbox" aria-label="Talen">
+            <button data-lang="nl" class="lang-option w-full flex items-center gap-3 px-3 py-2.5 text-sm text-white/85 hover:bg-white/[0.06] transition">
+              <span class="fi fi-nl rounded-[2px] !h-3.5 !w-5"></span>
+              <span class="font-medium">Nederlands</span>
+              <i data-lucide="check" class="lang-check h-4 w-4 ml-auto text-omega-300"></i>
+            </button>
+            <div class="h-px bg-white/5"></div>
+            <button data-lang="en" class="lang-option w-full flex items-center gap-3 px-3 py-2.5 text-sm text-white/85 hover:bg-white/[0.06] transition">
+              <span class="fi fi-gb rounded-[2px] !h-3.5 !w-5"></span>
+              <span class="font-medium">English</span>
+              <i data-lucide="check" class="lang-check h-4 w-4 ml-auto text-omega-300 invisible"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Whop link goes here later; for now scrolls to pricing -->
+        <a href="#pricing" class="inline-flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium bg-white text-ink-900 hover:bg-omega-300 transition px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg shadow-lg shadow-black/30">
+          <span data-i18n="nav.enroll">Inschrijven</span>
+          <i data-lucide="arrow-right" class="h-3.5 w-3.5 sm:h-4 sm:w-4"></i>
+        </a>
+      </div>
     </div>
   </header>
 
   <!-- HERO -->
   <section class="relative pt-32 pb-24 sm:pt-40 sm:pb-32 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6">
+
       <div class="text-center mt-8" data-aos="fade-up" data-aos-delay="100">
-        <h1 class="font-display font-semibold text-5xl sm:text-6xl lg:text-7xl tracking-tight leading-[1.05]">
-          Trade with the
+        <h1 class="font-display font-semibold text-5xl sm:text-6xl lg:text-7xl tracking-tight leading-[1.05]" data-i18n="hero.headline">
+          Handel met de
           <span class="relative inline-block whitespace-nowrap">
             <span class="bg-gradient-to-br from-omega-300 via-omega-400 to-omega-600 bg-clip-text text-transparent">Omega Sequence</span>
             <svg class="absolute -bottom-3 left-0 w-full" viewBox="0 0 300 14" fill="none" preserveAspectRatio="none">
@@ -134,22 +168,22 @@
               </linearGradient></defs>
             </svg>
           </span>
-          <br />the markets actually follow.
+          <br />die de markten echt volgen.
         </h1>
 
-        <p class="mt-8 text-lg sm:text-xl text-white/65 max-w-2xl mx-auto leading-relaxed">
-          A private mentorship teaching the <span class="text-white font-medium">Omega Sequence</span> alongside <span class="text-white font-medium">DR / IDR fundamentals</span> — the algorithmic delivery model used by precision traders to read time, range, and intent.
+        <p class="mt-8 text-lg sm:text-xl text-white/65 max-w-2xl mx-auto leading-relaxed" data-i18n="hero.sub">
+          Een exclusieve mentorship die de <span class="text-white font-medium">Omega Sequence</span> aanleert naast <span class="text-white font-medium">DR / IDR fundamenten</span> — het algoritmische leveringsmodel dat precisie-traders gebruiken om tijd, range en intentie te lezen.
         </p>
 
         <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4" data-aos="fade-up" data-aos-delay="200">
           <a href="#enroll" class="group relative inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-medium bg-gradient-to-br from-omega-300 to-omega-500 text-ink-900 shadow-xl shadow-omega-500/30 hover:shadow-omega-400/50 transition">
-            <span>Claim your seat</span>
+            <span data-i18n="hero.cta_primary">Reserveer je plek</span>
             <i data-lucide="arrow-right" class="h-4 w-4 group-hover:translate-x-0.5 transition"></i>
             <span class="absolute inset-0 rounded-xl bg-white/20 opacity-0 group-hover:opacity-100 transition"></span>
           </a>
           <a href="#curriculum" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-medium border border-white/15 bg-white/[0.04] hover:bg-white/[0.08] backdrop-blur transition">
             <i data-lucide="play" class="h-4 w-4 text-omega-300"></i>
-            <span>Preview curriculum</span>
+            <span data-i18n="hero.cta_secondary">Bekijk curriculum</span>
           </a>
         </div>
 
@@ -157,15 +191,15 @@
         <div class="mt-14 flex flex-wrap justify-center gap-x-10 gap-y-4 text-sm" data-aos="fade-up" data-aos-delay="300">
           <div class="flex items-center gap-2 text-white/55">
             <i data-lucide="users" class="h-4 w-4 text-omega-400"></i>
-            <span><b class="text-white">1,240+</b> mentored traders</span>
+            <span data-i18n="hero.stat1"><b class="text-white">1.240+</b> begeleide traders</span>
           </div>
           <div class="flex items-center gap-2 text-white/55">
             <i data-lucide="trending-up" class="h-4 w-4 text-omega-400"></i>
-            <span><b class="text-white">82%</b> reach prop funded</span>
+            <span data-i18n="hero.stat2"><b class="text-white">82%</b> bereikt prop funding</span>
           </div>
           <div class="flex items-center gap-2 text-white/55">
             <i data-lucide="clock" class="h-4 w-4 text-omega-400"></i>
-            <span><b class="text-white">8 weeks</b> structured program</span>
+            <span data-i18n="hero.stat3"><b class="text-white">8 weken</b> gestructureerd programma</span>
           </div>
         </div>
       </div>
@@ -184,7 +218,7 @@
                 <span class="h-2.5 w-2.5 rounded-full bg-omega-400/70"></span>
               </div>
               <div class="hidden sm:flex items-center gap-4 text-xs">
-                <span class="font-mono text-white/40">Drag the slider</span>
+                <span class="font-mono text-white/40" data-i18n="slider.drag">Sleep de slider</span>
                 <i data-lucide="move-horizontal" class="h-3.5 w-3.5 text-omega-300"></i>
               </div>
             </div>
@@ -211,9 +245,9 @@
               <div class="compare-fallback">
                 <div class="text-center px-6">
                   <i data-lucide="image" class="h-10 w-10 text-omega-300 mx-auto"></i>
-                  <p class="mt-4 font-display text-lg">Drop your screenshots in <span class="font-mono text-omega-300">/assets</span></p>
-                  <p class="mt-2 text-sm text-white/55">
-                    Save them as <span class="font-mono text-white/80">chart-with.png</span> and <span class="font-mono text-white/80">chart-without.png</span> — the slider will appear instantly.
+                  <p class="mt-4 font-display text-lg" data-i18n="slider.fallback1">Plaats je screenshots in <span class="font-mono text-omega-300">/assets</span></p>
+                  <p class="mt-2 text-sm text-white/55" data-i18n="slider.fallback2">
+                    Sla ze op als <span class="font-mono text-white/80">chart-with.png</span> en <span class="font-mono text-white/80">chart-without.png</span> — de slider verschijnt direct.
                   </p>
                 </div>
               </div>
@@ -225,7 +259,7 @@
 
     <!-- Marquee of trusted brokers / props -->
     <div class="mt-24 relative">
-      <p class="text-center text-xs uppercase tracking-[0.2em] text-white/30 mb-6">Students funded across</p>
+      <p class="text-center text-xs uppercase tracking-[0.2em] text-white/30 mb-6" data-i18n="marquee.title">Studenten gefinancierd via</p>
       <div class="marquee">
         <div class="marquee-track">
           <div class="marquee-item">FTMO</div>
@@ -255,13 +289,13 @@
     <div class="max-w-7xl mx-auto px-6">
       <div class="max-w-3xl" data-aos="fade-up">
         <span class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-omega-300 font-mono">
-          <i data-lucide="sparkles" class="h-3.5 w-3.5"></i> What you'll master
+          <i data-lucide="sparkles" class="h-3.5 w-3.5"></i> <span data-i18n="learn.eyebrow">Wat je leert beheersen</span>
         </span>
-        <h2 class="mt-4 font-display text-4xl sm:text-5xl font-semibold tracking-tight">
-          Two frameworks. <br /><span class="text-white/40">One precise edge.</span>
+        <h2 class="mt-4 font-display text-4xl sm:text-5xl font-semibold tracking-tight" data-i18n="learn.title">
+          Twee frameworks. <br /><span class="text-white/40">Eén precies voordeel.</span>
         </h2>
-        <p class="mt-5 text-white/60 text-lg leading-relaxed">
-          You don't need 50 indicators. You need a model of how price actually delivers. The mentorship is built around two pillars — and they reinforce each other.
+        <p class="mt-5 text-white/60 text-lg leading-relaxed" data-i18n="learn.sub">
+          Je hebt geen 50 indicatoren nodig. Je hebt een model nodig van hoe prijs daadwerkelijk geleverd wordt. De mentorship is gebouwd rond twee pijlers — en ze versterken elkaar.
         </p>
       </div>
 
@@ -275,19 +309,19 @@
               <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/15 border border-amber-500/30">
                 <i data-lucide="layout-grid" class="h-5 w-5 text-amber-400"></i>
               </span>
-              <span class="text-xs uppercase tracking-widest text-amber-400/80 font-mono">Module 01 · Foundation</span>
+              <span class="text-xs uppercase tracking-widest text-amber-400/80 font-mono" data-i18n="dridr.tag">Module 01 · Fundament</span>
             </div>
 
-            <h3 class="mt-6 font-display text-3xl font-semibold">DR / IDR Fundamentals</h3>
-            <p class="mt-3 text-white/60 leading-relaxed">
-              Learn the Defining Range and Implied Defining Range — the time-based liquidity model that frames every session. Identify high / low / close behavior with surgical clarity.
+            <h3 class="mt-6 font-display text-3xl font-semibold" data-i18n="dridr.title">DR / IDR Fundamenten</h3>
+            <p class="mt-3 text-white/60 leading-relaxed" data-i18n="dridr.desc">
+              Leer de Defining Range en Implied Defining Range — het tijd-gebaseerde liquiditeitsmodel dat elke sessie kadert. Identificeer high / low / close gedrag met chirurgische helderheid.
             </p>
 
             <ul class="mt-7 space-y-3 text-sm">
-              <li class="flex gap-3"><i data-lucide="check" class="h-4 w-4 text-amber-400 mt-0.5 shrink-0"></i><span class="text-white/75">Reading the 09:30–10:30 DR and the 03:00 / 08:00 IDR sessions</span></li>
-              <li class="flex gap-3"><i data-lucide="check" class="h-4 w-4 text-amber-400 mt-0.5 shrink-0"></i><span class="text-white/75">Standard deviation projections (±0.5, ±1, ±1.5, ±2)</span></li>
-              <li class="flex gap-3"><i data-lucide="check" class="h-4 w-4 text-amber-400 mt-0.5 shrink-0"></i><span class="text-white/75">Confirmation candles, liquidity sweeps & invalidations</span></li>
-              <li class="flex gap-3"><i data-lucide="check" class="h-4 w-4 text-amber-400 mt-0.5 shrink-0"></i><span class="text-white/75">Indicator setup — TradingView template included</span></li>
+              <li class="flex gap-3"><i data-lucide="check" class="h-4 w-4 text-amber-400 mt-0.5 shrink-0"></i><span class="text-white/75" data-i18n="dridr.b1">Het lezen van de 09:30–10:30 DR en de 03:00 / 08:00 IDR sessies</span></li>
+              <li class="flex gap-3"><i data-lucide="check" class="h-4 w-4 text-amber-400 mt-0.5 shrink-0"></i><span class="text-white/75" data-i18n="dridr.b2">Standaarddeviatie projecties (±0.5, ±1, ±1.5, ±2)</span></li>
+              <li class="flex gap-3"><i data-lucide="check" class="h-4 w-4 text-amber-400 mt-0.5 shrink-0"></i><span class="text-white/75" data-i18n="dridr.b3">Bevestigingscandles, liquidity sweeps & invalidaties</span></li>
+              <li class="flex gap-3"><i data-lucide="check" class="h-4 w-4 text-amber-400 mt-0.5 shrink-0"></i><span class="text-white/75" data-i18n="dridr.b4">Indicator setup — TradingView template inbegrepen</span></li>
             </ul>
           </div>
         </article>
@@ -301,20 +335,20 @@
               <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-omega-500/15 border border-omega-500/40 shadow-lg shadow-omega-500/20">
                 <span class="font-display font-bold text-omega-300 text-lg">Ω</span>
               </span>
-              <span class="text-xs uppercase tracking-widest text-omega-300 font-mono">Module 02–08 · The Edge</span>
+              <span class="text-xs uppercase tracking-widest text-omega-300 font-mono" data-i18n="omega.tag">Module 02–08 · Het Voordeel</span>
             </div>
 
-            <h3 class="mt-6 font-display text-3xl font-semibold">The Omega Sequence</h3>
-            <p class="mt-3 text-white/65 leading-relaxed">
-              A 7-step algorithmic delivery framework that maps how institutional price moves: <span class="text-white">liquidity → displacement → rebalance → expansion → continuation → terminus</span>. Read intent before it prints.
+            <h3 class="mt-6 font-display text-3xl font-semibold" data-i18n="omega.title">De Omega Sequence</h3>
+            <p class="mt-3 text-white/65 leading-relaxed" data-i18n="omega.desc">
+              Een 7-stappen algoritmisch leveringsframework dat in kaart brengt hoe institutionele prijs beweegt: <span class="text-white">liquiditeit → displacement → rebalance → expansion → continuation → terminus</span>. Lees intentie voordat het geprint wordt.
             </p>
 
             <ul class="mt-7 space-y-3 text-sm">
-              <li class="flex gap-3"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5 shrink-0"></i><span class="text-white/80">The 7 phases of the Sequence — annotated 1:1</span></li>
-              <li class="flex gap-3"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5 shrink-0"></i><span class="text-white/80">Time + price confluence with the DR / IDR model</span></li>
-              <li class="flex gap-3"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5 shrink-0"></i><span class="text-white/80">SMT, ICT power-of-3, and Omega's proprietary "terminus rule"</span></li>
-              <li class="flex gap-3"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5 shrink-0"></i><span class="text-white/80">Live execution playbook for indices, FX and crypto</span></li>
-              <li class="flex gap-3"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5 shrink-0"></i><span class="text-white/80">Backtested journal + bias-check template</span></li>
+              <li class="flex gap-3"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5 shrink-0"></i><span class="text-white/80" data-i18n="omega.b1">De 7 fases van de Sequence — 1:1 geannoteerd</span></li>
+              <li class="flex gap-3"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5 shrink-0"></i><span class="text-white/80" data-i18n="omega.b2">Tijd + prijs confluence met het DR / IDR model</span></li>
+              <li class="flex gap-3"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5 shrink-0"></i><span class="text-white/80" data-i18n="omega.b3">SMT, ICT power-of-3, en Omega's eigen "terminus rule"</span></li>
+              <li class="flex gap-3"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5 shrink-0"></i><span class="text-white/80" data-i18n="omega.b4">Live executie playbook voor indices, FX en crypto</span></li>
+              <li class="flex gap-3"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5 shrink-0"></i><span class="text-white/80" data-i18n="omega.b5">Backtested journaal + bias-check template</span></li>
             </ul>
           </div>
         </article>
@@ -324,23 +358,23 @@
       <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div class="rounded-xl border border-white/10 bg-white/[0.02] p-6 hover:bg-white/[0.04] transition" data-aos="fade-up">
           <i data-lucide="radio" class="h-6 w-6 text-omega-300"></i>
-          <h4 class="mt-4 font-display font-semibold">Live sessions</h4>
-          <p class="mt-1.5 text-sm text-white/55">3× weekly live trading & breakdown calls during NY open.</p>
+          <h4 class="mt-4 font-display font-semibold" data-i18n="feat1.t">Live sessies</h4>
+          <p class="mt-1.5 text-sm text-white/55" data-i18n="feat1.d">3× wekelijkse live trading & breakdown sessies tijdens NY open.</p>
         </div>
         <div class="rounded-xl border border-white/10 bg-white/[0.02] p-6 hover:bg-white/[0.04] transition" data-aos="fade-up" data-aos-delay="50">
           <i data-lucide="message-circle" class="h-6 w-6 text-omega-300"></i>
-          <h4 class="mt-4 font-display font-semibold">Private Discord</h4>
-          <p class="mt-1.5 text-sm text-white/55">Setups, journals, and 1-on-1 chart reviews from mentors.</p>
+          <h4 class="mt-4 font-display font-semibold" data-i18n="feat2.t">Privé Discord</h4>
+          <p class="mt-1.5 text-sm text-white/55" data-i18n="feat2.d">Setups, journaals en 1-op-1 chart reviews van mentoren.</p>
         </div>
         <div class="rounded-xl border border-white/10 bg-white/[0.02] p-6 hover:bg-white/[0.04] transition" data-aos="fade-up" data-aos-delay="100">
           <i data-lucide="bar-chart-3" class="h-6 w-6 text-omega-300"></i>
-          <h4 class="mt-4 font-display font-semibold">Ω Indicator</h4>
-          <p class="mt-1.5 text-sm text-white/55">Custom TradingView indicator that plots DR, IDR & Sequence phases.</p>
+          <h4 class="mt-4 font-display font-semibold" data-i18n="feat3.t">Ω Indicator</h4>
+          <p class="mt-1.5 text-sm text-white/55" data-i18n="feat3.d">Aangepaste TradingView indicator die DR, IDR & Sequence fases plot.</p>
         </div>
         <div class="rounded-xl border border-white/10 bg-white/[0.02] p-6 hover:bg-white/[0.04] transition" data-aos="fade-up" data-aos-delay="150">
           <i data-lucide="infinity" class="h-6 w-6 text-omega-300"></i>
-          <h4 class="mt-4 font-display font-semibold">Lifetime access</h4>
-          <p class="mt-1.5 text-sm text-white/55">Replay everything, attend any future cohort — forever.</p>
+          <h4 class="mt-4 font-display font-semibold" data-i18n="feat4.t">Levenslange toegang</h4>
+          <p class="mt-1.5 text-sm text-white/55" data-i18n="feat4.d">Bekijk alles opnieuw, neem deel aan elke toekomstige cohort — voor altijd.</p>
         </div>
       </div>
     </div>
@@ -351,10 +385,10 @@
     <div class="max-w-7xl mx-auto px-6">
       <div class="text-center max-w-2xl mx-auto" data-aos="fade-up">
         <span class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-omega-300 font-mono">
-          <i data-lucide="map" class="h-3.5 w-3.5"></i> The path
+          <i data-lucide="map" class="h-3.5 w-3.5"></i> <span data-i18n="curr.eyebrow">Het pad</span>
         </span>
-        <h2 class="mt-4 font-display text-4xl sm:text-5xl font-semibold tracking-tight">8-week curriculum</h2>
-        <p class="mt-5 text-white/60 text-lg">Structured progression from zero to confluence reading. Each week builds on the last.</p>
+        <h2 class="mt-4 font-display text-4xl sm:text-5xl font-semibold tracking-tight" data-i18n="curr.title">8-weken curriculum</h2>
+        <p class="mt-5 text-white/60 text-lg" data-i18n="curr.sub">Gestructureerde progressie van nul tot confluence lezen. Elke week bouwt voort op de vorige.</p>
       </div>
 
       <div class="mt-16 grid lg:grid-cols-2 gap-x-12">
@@ -364,7 +398,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <div class="font-mono text-xs text-omega-300">WEEK 01</div>
-                <div class="mt-1 font-display font-semibold text-lg">Foundations — DR / IDR Anatomy</div>
+                <div class="mt-1 font-display font-semibold text-lg" data-i18n="wk1">Fundamenten — DR / IDR Anatomie</div>
               </div>
               <i data-lucide="chevron-right" class="h-5 w-5 text-white/40"></i>
             </div>
@@ -373,7 +407,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <div class="font-mono text-xs text-white/40">WEEK 02</div>
-                <div class="mt-1 font-display font-semibold text-lg">Session timing & STDV projections</div>
+                <div class="mt-1 font-display font-semibold text-lg" data-i18n="wk2">Sessie timing & STDV projecties</div>
               </div>
               <i data-lucide="chevron-right" class="h-5 w-5 text-white/40"></i>
             </div>
@@ -382,7 +416,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <div class="font-mono text-xs text-white/40">WEEK 03</div>
-                <div class="mt-1 font-display font-semibold text-lg">Liquidity & market structure foundations</div>
+                <div class="mt-1 font-display font-semibold text-lg" data-i18n="wk3">Liquiditeit & marktstructuur fundamenten</div>
               </div>
               <i data-lucide="chevron-right" class="h-5 w-5 text-white/40"></i>
             </div>
@@ -391,7 +425,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <div class="font-mono text-xs text-white/40">WEEK 04</div>
-                <div class="mt-1 font-display font-semibold text-lg">Omega Sequence — Phases 1–3</div>
+                <div class="mt-1 font-display font-semibold text-lg" data-i18n="wk4">Omega Sequence — Fases 1–3</div>
               </div>
               <i data-lucide="chevron-right" class="h-5 w-5 text-white/40"></i>
             </div>
@@ -400,7 +434,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <div class="font-mono text-xs text-white/40">WEEK 05</div>
-                <div class="mt-1 font-display font-semibold text-lg">Omega Sequence — Phases 4–7</div>
+                <div class="mt-1 font-display font-semibold text-lg" data-i18n="wk5">Omega Sequence — Fases 4–7</div>
               </div>
               <i data-lucide="chevron-right" class="h-5 w-5 text-white/40"></i>
             </div>
@@ -409,7 +443,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <div class="font-mono text-xs text-white/40">WEEK 06</div>
-                <div class="mt-1 font-display font-semibold text-lg">Execution model & risk framework</div>
+                <div class="mt-1 font-display font-semibold text-lg" data-i18n="wk6">Executiemodel & risicoframework</div>
               </div>
               <i data-lucide="chevron-right" class="h-5 w-5 text-white/40"></i>
             </div>
@@ -418,7 +452,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <div class="font-mono text-xs text-white/40">WEEK 07</div>
-                <div class="mt-1 font-display font-semibold text-lg">Backtesting & journaling — the Ω template</div>
+                <div class="mt-1 font-display font-semibold text-lg" data-i18n="wk7">Backtesting & journaling — de Ω template</div>
               </div>
               <i data-lucide="chevron-right" class="h-5 w-5 text-white/40"></i>
             </div>
@@ -427,7 +461,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <div class="font-mono text-xs text-white/40">WEEK 08</div>
-                <div class="mt-1 font-display font-semibold text-lg">Live trading week + prop firm prep</div>
+                <div class="mt-1 font-display font-semibold text-lg" data-i18n="wk8">Live trading week + prop firm voorbereiding</div>
               </div>
               <i data-lucide="chevron-right" class="h-5 w-5 text-white/40"></i>
             </div>
@@ -456,14 +490,14 @@
             <div class="absolute top-5 left-5">
               <span class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-ink-900/60 backdrop-blur px-3 py-1 text-[10px] uppercase tracking-[0.25em] font-mono text-white/80">
                 <span class="h-1.5 w-1.5 rounded-full bg-omega-400"></span>
-                Your mentor
+                <span data-i18n="mentor.badge">Jouw mentor</span>
               </span>
             </div>
             <div class="absolute bottom-5 left-5 right-5 rounded-xl border border-white/10 bg-ink-900/80 backdrop-blur p-4">
               <div class="flex items-center justify-between gap-3">
                 <div>
-                  <div class="font-display font-semibold text-lg leading-none text-omega-300">Mentor Gio</div>
-                  <div class="font-mono text-[11px] text-white/55 mt-1">7+ years · 12,000+ trades logged</div>
+                  <div class="font-display font-semibold text-lg leading-none text-omega-300" data-i18n="mentor.name">Mentor Gio</div>
+                  <div class="font-mono text-[11px] text-white/55 mt-1" data-i18n="mentor.meta">7+ jaar · 12.000+ trades gelogd</div>
                 </div>
                 <div class="h-2 w-2 rounded-full bg-omega-400 animate-pulse shrink-0"></div>
               </div>
@@ -473,33 +507,33 @@
 
         <div class="lg:col-span-3" data-aos="fade-left">
           <span class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-omega-300 font-mono">
-            <i data-lucide="user" class="h-3.5 w-3.5"></i> Meet Gio
+            <i data-lucide="user" class="h-3.5 w-3.5"></i> <span data-i18n="mentor.eyebrow">Maak kennis met Gio</span>
           </span>
-          <h2 class="mt-4 font-display text-4xl sm:text-5xl font-semibold tracking-tight">
-            Taught by a trader<br/>who actually trades.
+          <h2 class="mt-4 font-display text-4xl sm:text-5xl font-semibold tracking-tight" data-i18n="mentor.title">
+            Gegeven door een trader<br/>die echt handelt.
           </h2>
-          <p class="mt-6 text-white/65 text-lg leading-relaxed">
-            Omega Sequence is led by <span class="text-white font-medium">Gio</span> — a former prop trader who built the framework after 7 years of dissecting algorithmic delivery on indices and FX. Every concept taught is one used in his own live execution — nothing recycled, nothing theoretical.
+          <p class="mt-6 text-white/65 text-lg leading-relaxed" data-i18n="mentor.bio">
+            Omega Sequence wordt geleid door <span class="text-white font-medium">Gio</span> — een voormalig prop trader die het framework bouwde na 7 jaar het ontleden van algoritmische levering op indices en FX. Elk concept dat wordt onderwezen, gebruikt hij in zijn eigen live executie — niets gerecycled, niets theoretisch.
           </p>
 
           <div class="mt-8 grid grid-cols-3 gap-2 sm:gap-4">
             <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3 sm:p-5 min-w-0">
               <div class="font-display text-xl sm:text-3xl font-semibold text-omega-300 leading-none">7+</div>
-              <div class="text-[11px] sm:text-xs text-white/55 mt-1.5 sm:mt-1">Years in markets</div>
+              <div class="text-[11px] sm:text-xs text-white/55 mt-1.5 sm:mt-1" data-i18n="mentor.s1">Jaren in markten</div>
             </div>
             <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3 sm:p-5 min-w-0">
-              <div class="font-display text-xl sm:text-3xl font-semibold text-omega-300 leading-none">$2.4M</div>
-              <div class="text-[11px] sm:text-xs text-white/55 mt-1.5 sm:mt-1">Funded capital cleared</div>
+              <div class="font-display text-xl sm:text-3xl font-semibold text-omega-300 leading-none">€2,2M</div>
+              <div class="text-[11px] sm:text-xs text-white/55 mt-1.5 sm:mt-1" data-i18n="mentor.s2">Funded kapitaal</div>
             </div>
             <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3 sm:p-5 min-w-0">
-              <div class="font-display text-xl sm:text-3xl font-semibold text-omega-300 leading-none">1.2k+</div>
-              <div class="text-[11px] sm:text-xs text-white/55 mt-1.5 sm:mt-1">Mentored 1-on-1</div>
+              <div class="font-display text-xl sm:text-3xl font-semibold text-omega-300 leading-none">1,2k+</div>
+              <div class="text-[11px] sm:text-xs text-white/55 mt-1.5 sm:mt-1" data-i18n="mentor.s3">1-op-1 begeleid</div>
             </div>
           </div>
 
           <div class="mt-8 flex flex-wrap gap-3">
             <span class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/70">Indices · NQ / ES</span>
-            <span class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/70">FX Majors</span>
+            <span class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/70" data-i18n="mentor.tag2">FX Hoofdvaluta's</span>
             <span class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/70">BTC / ETH</span>
             <span class="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/70">Prop-funded</span>
           </div>
@@ -513,9 +547,9 @@
     <div class="max-w-7xl mx-auto px-6">
       <div class="text-center max-w-2xl mx-auto" data-aos="fade-up">
         <span class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-omega-300 font-mono">
-          <i data-lucide="quote" class="h-3.5 w-3.5"></i> Student results
+          <i data-lucide="quote" class="h-3.5 w-3.5"></i> <span data-i18n="test.eyebrow">Studentresultaten</span>
         </span>
-        <h2 class="mt-4 font-display text-4xl sm:text-5xl font-semibold tracking-tight">Built on receipts.</h2>
+        <h2 class="mt-4 font-display text-4xl sm:text-5xl font-semibold tracking-tight" data-i18n="test.title">Gebaseerd op bewijs.</h2>
       </div>
 
       <div class="mt-16 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -527,7 +561,7 @@
             <i data-lucide="star" class="h-4 w-4 fill-current"></i>
             <i data-lucide="star" class="h-4 w-4 fill-current"></i>
           </div>
-          <p class="mt-5 text-white/80 leading-relaxed">"The DR / IDR module alone made me unlearn 3 years of bad habits. Then the Sequence taught me to read intent. Funded with FTMO in week 6."</p>
+          <p class="mt-5 text-white/80 leading-relaxed" data-i18n="t1.quote">"Alleen de DR / IDR module liet me al 3 jaar slechte gewoontes afleren. Toen leerde de Sequence me intentie te lezen. Funded met FTMO in week 6."</p>
           <div class="mt-6 flex items-center gap-3">
             <div class="h-10 w-10 rounded-full bg-gradient-to-br from-omega-400 to-omega-600 flex items-center justify-center font-display font-semibold text-ink-900">M</div>
             <div>
@@ -545,7 +579,7 @@
             <i data-lucide="star" class="h-4 w-4 fill-current"></i>
             <i data-lucide="star" class="h-4 w-4 fill-current"></i>
           </div>
-          <p class="mt-5 text-white/80 leading-relaxed">"I'd taken three other mentorships before this. Omega is the only one that connects time, range, and structure into a single decision tree."</p>
+          <p class="mt-5 text-white/80 leading-relaxed" data-i18n="t2.quote">"Ik had drie andere mentorships gevolgd voor deze. Omega is de enige die tijd, range en structuur verbindt in één beslisboom."</p>
           <div class="mt-6 flex items-center gap-3">
             <div class="h-10 w-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center font-display font-semibold text-ink-900">S</div>
             <div>
@@ -563,7 +597,7 @@
             <i data-lucide="star" class="h-4 w-4 fill-current"></i>
             <i data-lucide="star" class="h-4 w-4 fill-current"></i>
           </div>
-          <p class="mt-5 text-white/80 leading-relaxed">"The indicator is gold. Plotted phases on my charts and suddenly the noise became signal. My win rate jumped from 41% to 67%."</p>
+          <p class="mt-5 text-white/80 leading-relaxed" data-i18n="t3.quote">"De indicator is goud waard. Plotte fases op mijn charts en plots werd de ruis een signaal. Mijn win rate steeg van 41% naar 67%."</p>
           <div class="mt-6 flex items-center gap-3">
             <div class="h-10 w-10 rounded-full bg-gradient-to-br from-omega-300 to-omega-500 flex items-center justify-center font-display font-semibold text-ink-900">D</div>
             <div>
@@ -581,80 +615,62 @@
     <div class="max-w-7xl mx-auto px-6">
       <div class="text-center max-w-2xl mx-auto" data-aos="fade-up">
         <span class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-omega-300 font-mono">
-          <i data-lucide="diamond" class="h-3.5 w-3.5"></i> Enrollment
+          <i data-lucide="diamond" class="h-3.5 w-3.5"></i> <span data-i18n="price.eyebrow">Inschrijving</span>
         </span>
-        <h2 class="mt-4 font-display text-4xl sm:text-5xl font-semibold tracking-tight">Pick your path</h2>
-        <p class="mt-5 text-white/60 text-lg">One-time. Lifetime access. No upsells.</p>
+        <h2 class="mt-4 font-display text-4xl sm:text-5xl font-semibold tracking-tight" data-i18n="price.title">Kies je pad</h2>
+        <p class="mt-5 text-white/60 text-lg" data-i18n="price.sub">Twee manieren binnen. Hetzelfde voordeel.</p>
       </div>
 
-      <div class="mt-16 grid md:grid-cols-3 gap-5 max-w-5xl mx-auto">
-        <!-- Starter -->
-        <div class="rounded-2xl border border-white/10 bg-white/[0.02] p-8 flex flex-col" data-aos="fade-up">
-          <div class="font-display font-semibold text-lg">Starter</div>
-          <div class="mt-1 text-sm text-white/55">DR / IDR foundation</div>
-          <div class="mt-7">
-            <span class="font-display text-5xl font-semibold">$249</span>
-            <span class="text-white/40 ml-1">one-time</span>
-          </div>
-          <ul class="mt-8 space-y-3 text-sm text-white/75 flex-1">
-            <li class="flex gap-2"><i data-lucide="check" class="h-4 w-4 text-omega-300 mt-0.5"></i> Full DR / IDR module (week 1–3)</li>
-            <li class="flex gap-2"><i data-lucide="check" class="h-4 w-4 text-omega-300 mt-0.5"></i> Indicator (free version)</li>
-            <li class="flex gap-2"><i data-lucide="check" class="h-4 w-4 text-omega-300 mt-0.5"></i> Discord community access</li>
-            <li class="flex gap-2"><i data-lucide="x" class="h-4 w-4 text-white/20 mt-0.5"></i> <span class="text-white/35">Omega Sequence modules</span></li>
-            <li class="flex gap-2"><i data-lucide="x" class="h-4 w-4 text-white/20 mt-0.5"></i> <span class="text-white/35">Live sessions</span></li>
-          </ul>
-          <a href="#enroll" class="mt-8 inline-flex items-center justify-center px-5 py-3 rounded-xl border border-white/15 hover:bg-white/[0.06] font-medium transition">Start here</a>
-        </div>
-
+      <div class="mt-16 grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
         <!-- Pro - highlighted -->
-        <div class="relative rounded-2xl border border-omega-400/40 bg-gradient-to-br from-omega-500/[0.08] to-white/[0.02] p-8 flex flex-col shadow-xl shadow-omega-500/20" data-aos="fade-up" data-aos-delay="100">
+        <div class="relative rounded-2xl border border-omega-400/40 bg-gradient-to-br from-omega-500/[0.08] to-white/[0.02] p-8 flex flex-col shadow-xl shadow-omega-500/20" data-aos="fade-up">
           <div class="absolute -inset-px rounded-2xl bg-gradient-to-br from-omega-400/30 to-transparent -z-10 blur"></div>
           <div class="absolute -top-3 left-1/2 -translate-x-1/2">
-            <span class="rounded-full bg-gradient-to-r from-omega-400 to-omega-500 text-ink-900 text-[10px] uppercase tracking-widest font-bold px-3 py-1">Most popular</span>
+            <span class="rounded-full bg-gradient-to-r from-omega-400 to-omega-500 text-ink-900 text-[10px] uppercase tracking-widest font-bold px-3 py-1" data-i18n="price.popular">Meest gekozen</span>
           </div>
           <div class="font-display font-semibold text-lg">Omega Pro</div>
-          <div class="mt-1 text-sm text-white/65">The full mentorship</div>
+          <div class="mt-1 text-sm text-white/65" data-i18n="price.pro_sub">De volledige mentorship</div>
           <div class="mt-7 flex items-baseline gap-2">
-            <span class="font-display text-5xl font-semibold">$899</span>
-            <span class="line-through text-white/30 text-lg">$1,299</span>
+            <span class="font-display text-5xl font-semibold">€120</span>
+            <span class="text-white/40 ml-1" data-i18n="price.month">/ maand</span>
           </div>
-          <div class="text-xs text-omega-300 mt-1 font-mono">Cohort 04 launch pricing</div>
+          <div class="text-xs text-omega-300 mt-1 font-mono" data-i18n="price.pro_meta">Altijd opzegbaar · Levenslange toegang tot materiaal</div>
           <ul class="mt-8 space-y-3 text-sm text-white/85 flex-1">
-            <li class="flex gap-2"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5"></i> Everything in Starter</li>
-            <li class="flex gap-2"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5"></i> All 7 Omega Sequence phases</li>
-            <li class="flex gap-2"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5"></i> Pro Ω TradingView indicator</li>
-            <li class="flex gap-2"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5"></i> 3× weekly live sessions (8 weeks)</li>
-            <li class="flex gap-2"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5"></i> Backtesting journal template</li>
-            <li class="flex gap-2"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5"></i> Prop firm prep & funded plan</li>
-            <li class="flex gap-2"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5"></i> Lifetime access</li>
+            <li class="flex gap-2"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5"></i> <span data-i18n="price.pro_b1">Volledige DR / IDR fundament modules</span></li>
+            <li class="flex gap-2"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5"></i> <span data-i18n="price.pro_b2">Alle 7 Omega Sequence fases</span></li>
+            <li class="flex gap-2"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5"></i> <span data-i18n="price.pro_b3">Pro Ω TradingView indicator</span></li>
+            <li class="flex gap-2"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5"></i> <span data-i18n="price.pro_b4">3× wekelijkse live sessies (8 weken)</span></li>
+            <li class="flex gap-2"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5"></i> <span data-i18n="price.pro_b5">Backtesting journaal template</span></li>
+            <li class="flex gap-2"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5"></i> <span data-i18n="price.pro_b6">Prop firm voorbereiding & funded plan</span></li>
+            <li class="flex gap-2"><i data-lucide="check-circle-2" class="h-4 w-4 text-omega-300 mt-0.5"></i> <span data-i18n="price.pro_b7">Privé Discord community</span></li>
           </ul>
           <a id="enroll" href="#" class="mt-8 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-omega-300 to-omega-500 text-ink-900 font-semibold hover:shadow-lg hover:shadow-omega-400/40 transition">
-            Enroll in Pro <i data-lucide="arrow-right" class="h-4 w-4"></i>
+            <span data-i18n="price.pro_cta">Schrijf in voor Pro</span> <i data-lucide="arrow-right" class="h-4 w-4"></i>
           </a>
         </div>
 
         <!-- Elite -->
-        <div class="rounded-2xl border border-white/10 bg-white/[0.02] p-8 flex flex-col" data-aos="fade-up" data-aos-delay="200">
-          <div class="font-display font-semibold text-lg">Elite 1-on-1</div>
-          <div class="mt-1 text-sm text-white/55">Private mentorship</div>
+        <div class="rounded-2xl border border-white/10 bg-white/[0.02] p-8 flex flex-col" data-aos="fade-up" data-aos-delay="100">
+          <div class="font-display font-semibold text-lg" data-i18n="price.elite_name">Elite 1-op-1</div>
+          <div class="mt-1 text-sm text-white/55" data-i18n="price.elite_sub">Privé mentorship</div>
           <div class="mt-7">
-            <span class="font-display text-5xl font-semibold">$2,499</span>
-            <span class="text-white/40 ml-1">one-time</span>
+            <span class="font-display text-5xl font-semibold">€1.500</span>
+            <span class="text-white/40 ml-1" data-i18n="price.onetime">eenmalig</span>
           </div>
           <ul class="mt-8 space-y-3 text-sm text-white/75 flex-1">
-            <li class="flex gap-2"><i data-lucide="check" class="h-4 w-4 text-omega-300 mt-0.5"></i> Everything in Omega Pro</li>
-            <li class="flex gap-2"><i data-lucide="check" class="h-4 w-4 text-omega-300 mt-0.5"></i> 8× private 1-on-1 calls</li>
-            <li class="flex gap-2"><i data-lucide="check" class="h-4 w-4 text-omega-300 mt-0.5"></i> Personal chart reviews weekly</li>
-            <li class="flex gap-2"><i data-lucide="check" class="h-4 w-4 text-omega-300 mt-0.5"></i> Direct WhatsApp line</li>
-            <li class="flex gap-2"><i data-lucide="check" class="h-4 w-4 text-omega-300 mt-0.5"></i> Funded challenge sponsorship</li>
+            <li class="flex gap-2"><i data-lucide="check" class="h-4 w-4 text-omega-300 mt-0.5"></i> <span data-i18n="price.elite_b1">Alles in Omega Pro</span></li>
+            <li class="flex gap-2"><i data-lucide="check" class="h-4 w-4 text-omega-300 mt-0.5"></i> <span data-i18n="price.elite_b2">8× privé 1-op-1 sessies</span></li>
+            <li class="flex gap-2"><i data-lucide="check" class="h-4 w-4 text-omega-300 mt-0.5"></i> <span data-i18n="price.elite_b3">Wekelijkse persoonlijke chart reviews</span></li>
+            <li class="flex gap-2"><i data-lucide="check" class="h-4 w-4 text-omega-300 mt-0.5"></i> <span data-i18n="price.elite_b4">Directe WhatsApp lijn</span></li>
+            <li class="flex gap-2"><i data-lucide="check" class="h-4 w-4 text-omega-300 mt-0.5"></i> <span data-i18n="price.elite_b5">Funded challenge sponsoring</span></li>
           </ul>
-          <a href="#enroll" class="mt-8 inline-flex items-center justify-center px-5 py-3 rounded-xl border border-white/15 hover:bg-white/[0.06] font-medium transition">Apply</a>
+          <a href="#enroll" class="mt-8 inline-flex items-center justify-center px-5 py-3 rounded-xl border border-white/15 hover:bg-white/[0.06] font-medium transition" data-i18n="price.elite_cta">Aanvragen</a>
         </div>
       </div>
 
-      <p class="mt-10 text-center text-sm text-white/40">
+      <p class="mt-10 text-center text-sm text-white/40" data-i18n="price.refund">
         <i data-lucide="shield-check" class="inline h-4 w-4 mr-1 -mt-1"></i>
-        14-day refund · No questions asked
+        14 dagen geld terug · Geen vragen gesteld
       </p>
     </div>
   </section>
@@ -666,67 +682,67 @@
         <span class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-omega-300 font-mono">
           <i data-lucide="help-circle" class="h-3.5 w-3.5"></i> FAQ
         </span>
-        <h2 class="mt-4 font-display text-4xl sm:text-5xl font-semibold tracking-tight">Common questions</h2>
+        <h2 class="mt-4 font-display text-4xl sm:text-5xl font-semibold tracking-tight" data-i18n="faq.title">Veelgestelde vragen</h2>
       </div>
 
       <div class="mt-14 space-y-3">
         <details class="faq group rounded-xl border border-white/10 bg-white/[0.02]" open>
           <summary class="flex items-center justify-between cursor-pointer p-5 list-none">
-            <span class="font-display font-medium">Do I need prior trading experience?</span>
+            <span class="font-display font-medium" data-i18n="faq.q1">Heb ik voorafgaande trading ervaring nodig?</span>
             <i data-lucide="plus" class="h-5 w-5 text-omega-300 group-open:rotate-45 transition"></i>
           </summary>
-          <div class="px-5 pb-5 text-white/60 leading-relaxed text-sm">
-            No. The DR / IDR module starts from absolute first principles. If you can read a candle, you can start. Pro Omega Sequence assumes you've completed the foundation, which is included.
+          <div class="px-5 pb-5 text-white/60 leading-relaxed text-sm" data-i18n="faq.a1">
+            Nee. De DR / IDR module begint vanaf de absolute basis. Als je een candle kunt lezen, kun je starten. Pro Omega Sequence gaat ervan uit dat je het fundament hebt afgerond, wat inbegrepen is.
           </div>
         </details>
 
         <details class="faq group rounded-xl border border-white/10 bg-white/[0.02]">
           <summary class="flex items-center justify-between cursor-pointer p-5 list-none">
-            <span class="font-display font-medium">What markets does it work on?</span>
+            <span class="font-display font-medium" data-i18n="faq.q2">Op welke markten werkt het?</span>
             <i data-lucide="plus" class="h-5 w-5 text-omega-300 group-open:rotate-45 transition"></i>
           </summary>
-          <div class="px-5 pb-5 text-white/60 leading-relaxed text-sm">
-            The Omega Sequence is asset-agnostic. We focus primarily on indices (NQ, ES), FX majors, and BTC/ETH — but the same logic applies to any liquid market.
+          <div class="px-5 pb-5 text-white/60 leading-relaxed text-sm" data-i18n="faq.a2">
+            De Omega Sequence is asset-agnostisch. We focussen voornamelijk op indices (NQ, ES), FX hoofdvaluta's, en BTC/ETH — maar dezelfde logica geldt voor elke liquide markt.
           </div>
         </details>
 
         <details class="faq group rounded-xl border border-white/10 bg-white/[0.02]">
           <summary class="flex items-center justify-between cursor-pointer p-5 list-none">
-            <span class="font-display font-medium">How much time per week?</span>
+            <span class="font-display font-medium" data-i18n="faq.q3">Hoeveel tijd per week?</span>
             <i data-lucide="plus" class="h-5 w-5 text-omega-300 group-open:rotate-45 transition"></i>
           </summary>
-          <div class="px-5 pb-5 text-white/60 leading-relaxed text-sm">
-            Plan for 4–6 hours per week: 1 live session (recorded if missed), 1 backtesting block, plus async lessons. The whole cohort runs 8 weeks.
+          <div class="px-5 pb-5 text-white/60 leading-relaxed text-sm" data-i18n="faq.a3">
+            Reken op 4–6 uur per week: 1 live sessie (opgenomen indien gemist), 1 backtesting blok, plus async lessen. De hele cohort duurt 8 weken.
           </div>
         </details>
 
         <details class="faq group rounded-xl border border-white/10 bg-white/[0.02]">
           <summary class="flex items-center justify-between cursor-pointer p-5 list-none">
-            <span class="font-display font-medium">Is the indicator paid separately?</span>
+            <span class="font-display font-medium" data-i18n="faq.q4">Wordt de indicator apart betaald?</span>
             <i data-lucide="plus" class="h-5 w-5 text-omega-300 group-open:rotate-45 transition"></i>
           </summary>
-          <div class="px-5 pb-5 text-white/60 leading-relaxed text-sm">
-            Both indicators are included with their respective tiers — no extra subscription. The Pro Ω indicator plots DR, IDR, STDV levels and the 7 Sequence phases live.
+          <div class="px-5 pb-5 text-white/60 leading-relaxed text-sm" data-i18n="faq.a4">
+            Beide indicatoren zijn inbegrepen bij hun respectievelijke pakketten — geen extra abonnement. De Pro Ω indicator plot DR, IDR, STDV niveaus en de 7 Sequence fases live.
           </div>
         </details>
 
         <details class="faq group rounded-xl border border-white/10 bg-white/[0.02]">
           <summary class="flex items-center justify-between cursor-pointer p-5 list-none">
-            <span class="font-display font-medium">Is this just ICT repackaged?</span>
+            <span class="font-display font-medium" data-i18n="faq.q5">Is dit gewoon ICT in nieuwe verpakking?</span>
             <i data-lucide="plus" class="h-5 w-5 text-omega-300 group-open:rotate-45 transition"></i>
           </summary>
-          <div class="px-5 pb-5 text-white/60 leading-relaxed text-sm">
-            No. The Sequence borrows the lens of algorithmic delivery from ICT methodology, but the 7-phase framework, terminus rule, and integration with DR / IDR timing are original to Omega. Clean, codified, and testable.
+          <div class="px-5 pb-5 text-white/60 leading-relaxed text-sm" data-i18n="faq.a5">
+            Nee. De Sequence ontleent de algoritmische lens van de ICT methodologie, maar het 7-fase framework, de terminus regel en de integratie met DR / IDR timing zijn origineel van Omega. Schoon, gecodificeerd en testbaar.
           </div>
         </details>
 
         <details class="faq group rounded-xl border border-white/10 bg-white/[0.02]">
           <summary class="flex items-center justify-between cursor-pointer p-5 list-none">
-            <span class="font-display font-medium">Refund policy?</span>
+            <span class="font-display font-medium" data-i18n="faq.q6">Refundbeleid?</span>
             <i data-lucide="plus" class="h-5 w-5 text-omega-300 group-open:rotate-45 transition"></i>
           </summary>
-          <div class="px-5 pb-5 text-white/60 leading-relaxed text-sm">
-            14 days, full refund, no questions. If the program isn't for you, just email — we keep it simple.
+          <div class="px-5 pb-5 text-white/60 leading-relaxed text-sm" data-i18n="faq.a6">
+            14 dagen, volledige terugbetaling, geen vragen gesteld. Als het programma niets voor je is, stuur dan gewoon een e-mail — we houden het simpel.
           </div>
         </details>
       </div>
@@ -741,18 +757,16 @@
         <div class="absolute -bottom-32 -right-32 h-80 w-80 rounded-full bg-amber-500/20 blur-3xl"></div>
 
         <div class="relative">
-          <h2 class="font-display text-4xl sm:text-6xl font-semibold tracking-tight max-w-3xl mx-auto">
-            Stop guessing.<br/>Start <span class="bg-gradient-to-br from-omega-300 to-omega-500 bg-clip-text text-transparent">reading the algorithm.</span>
+          <h2 class="font-display text-4xl sm:text-6xl font-semibold tracking-tight max-w-3xl mx-auto" data-i18n="cta.title">
+            Stop met gokken.<br/>Begin met <span class="bg-gradient-to-br from-omega-300 to-omega-500 bg-clip-text text-transparent">het lezen van het algoritme.</span>
           </h2>
-          <p class="mt-6 text-white/65 text-lg max-w-xl mx-auto">
-            Cohort 04 begins in 6 days. Once seats close, the next one opens in three months.
-          </p>
+         
           <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="#pricing" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-medium bg-gradient-to-br from-omega-300 to-omega-500 text-ink-900 shadow-xl shadow-omega-500/30 hover:shadow-omega-400/50 transition">
-              Enroll now <i data-lucide="arrow-right" class="h-4 w-4"></i>
+              <span data-i18n="cta.primary">Schrijf je nu in</span> <i data-lucide="arrow-right" class="h-4 w-4"></i>
             </a>
-            <a href="#curriculum" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-medium border border-white/15 bg-white/[0.04] hover:bg-white/[0.08] backdrop-blur transition">
-              See full curriculum
+            <a href="#curriculum" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-medium border border-white/15 bg-white/[0.04] hover:bg-white/[0.08] backdrop-blur transition" data-i18n="cta.secondary">
+              Bekijk volledig curriculum
             </a>
           </div>
         </div>
@@ -770,7 +784,7 @@
         <span class="font-display font-semibold tracking-tight">Omega Sequence</span>
       </div>
 
-      <div class="text-sm text-white/40">© 2026 Omega Sequence. Trading involves risk. Past performance is not indicative of future results.</div>
+      <div class="text-sm text-white/40" data-i18n="footer.copy">© 2026 Omega Sequence. Trading brengt risico's met zich mee. Resultaten uit het verleden zijn geen garantie voor de toekomst.</div>
 
       <div class="flex items-center gap-4 text-white/50">
         <a href="#" class="hover:text-white transition"><i data-lucide="twitter" class="h-4 w-4"></i></a>
