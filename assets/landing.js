@@ -16,11 +16,53 @@ lucide.createIcons();
 /* ---------- Navbar scroll state ---------- */
 const navbar = document.getElementById('navbar');
 const onScroll = () => {
+  if (!navbar) return;
   if (window.scrollY > 20) navbar.classList.add('scrolled');
   else navbar.classList.remove('scrolled');
 };
-window.addEventListener('scroll', onScroll, { passive: true });
-onScroll();
+if (navbar) {
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
+
+/* ---------- Responsive mobile navigation ---------- */
+(function bindMobileNav() {
+  const toggle = document.getElementById('mobileMenuToggle');
+  const menu = document.getElementById('mobileMenu');
+  const iconOpen = document.getElementById('mobileMenuIconOpen');
+  const iconClose = document.getElementById('mobileMenuIconClose');
+  if (!toggle || !menu) return;
+
+  function setOpen(open) {
+    menu.classList.toggle('hidden', !open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (iconOpen) iconOpen.classList.toggle('hidden', open);
+    if (iconClose) iconClose.classList.toggle('hidden', !open);
+  }
+
+  toggle.addEventListener('click', e => {
+    e.stopPropagation();
+    setOpen(menu.classList.contains('hidden'));
+  });
+
+  menu.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', () => setOpen(false));
+  });
+
+  document.addEventListener('click', e => {
+    if (menu.classList.contains('hidden')) return;
+    if (navbar && navbar.contains(e.target)) return;
+    setOpen(false);
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.matchMedia('(min-width: 1024px)').matches) setOpen(false);
+  });
+})();
 
 /* ---------- GDPR cookie consent banner ---------- */
 (function cookieBanner() {
@@ -54,6 +96,7 @@ onScroll();
 
 /* ---------- First-scroll Omega rain ---------- */
 (function omegaRain() {
+  if (document.body.dataset.page !== 'landing') return;
   // Respect reduced-motion users
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -346,6 +389,10 @@ const i18n = {
     'nav.pricing': 'Prijzen',
     'nav.faq': 'FAQ',
     'nav.enroll': 'Inschrijven',
+    'nav.menu': 'Menu',
+    'nav.login': 'Inloggen',
+    'nav.logout': 'Uitloggen',
+    'nav.dashboard': 'Dashboard',
 
     'hero.cohort': 'Cohort 04 — Inschrijving open',
     'hero.seats':  'Nog 37 plaatsen',
@@ -479,6 +526,10 @@ const i18n = {
     'nav.pricing': 'Pricing',
     'nav.faq': 'FAQ',
     'nav.enroll': 'Enroll',
+    'nav.menu': 'Menu',
+    'nav.login': 'Login',
+    'nav.logout': 'Logout',
+    'nav.dashboard': 'Dashboard',
 
     'hero.cohort': 'Cohort 04 — Enrollment open',
     'hero.seats':  '37 seats left',
@@ -636,6 +687,12 @@ function setLang(lang) {
     if (val === undefined) return;
     el.innerHTML = val;
   });
+  document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+    const key = el.dataset.i18nAriaLabel;
+    const val = i18n[lang][key];
+    if (val === undefined) return;
+    el.setAttribute('aria-label', val.replace(/<[^>]*>/g, ''));
+  });
   // Re-render the currently active curriculum module in the new language
   if (typeof renderModule === 'function') renderModule(currentMod);
   // Re-init Lucide icons (some HTML strings include <i data-lucide>)
@@ -707,4 +764,3 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     window.scrollTo({ top: y, behavior: 'smooth' });
   });
 });
-

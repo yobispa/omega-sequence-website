@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login | Omega Sequence{% endblock %}
+
+{% block body %}
+  <main class="relative min-h-screen pt-28 pb-20 sm:pt-36">
+    <section class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-[0.95fr_1.05fr] gap-8 lg:gap-12 items-center">
+        <div class="max-w-xl" data-aos="fade-up">
+          <span class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-omega-300 font-mono">
+            <i data-lucide="lock-keyhole" class="h-3.5 w-3.5"></i>
+            Member access
+          </span>
+          <h1 class="mt-5 font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05]">
+            Enter the<br>
+            <span class="bg-gradient-to-br from-omega-300 via-omega-400 to-omega-600 bg-clip-text text-transparent">Omega workspace.</span>
+          </h1>
+          <p class="mt-6 text-white/60 text-lg leading-relaxed">
+            Login to reach your dashboard, dataset pipeline, pair coverage, and future backtesting workspace.
+          </p>
+
+          <div class="mt-10 grid sm:grid-cols-3 gap-3">
+            <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <div class="text-2xl font-display font-semibold text-white">0</div>
+              <div class="mt-1 text-xs text-white/45">Datasets live</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <div class="text-2xl font-display font-semibold text-white">42</div>
+              <div class="mt-1 text-xs text-white/45">Pairs planned</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <div class="text-2xl font-display font-semibold text-white">1</div>
+              <div class="mt-1 text-xs text-white/45">Private cockpit</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative" data-aos="fade-up" data-aos-delay="100">
+          <div class="rounded-2xl border border-white/10 bg-white/[0.035] p-5 sm:p-7 shadow-2xl shadow-black/40">
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <h2 class="font-display text-2xl font-semibold">Login</h2>
+                <p class="mt-1 text-sm text-white/45">Use your Omega Sequence account.</p>
+              </div>
+              <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-omega-300 to-omega-500 text-ink-900">
+                <i data-lucide="user-round-check" class="h-5 w-5"></i>
+              </span>
+            </div>
+
+            {% if error %}
+              <div class="mt-6 rounded-xl border border-red-400/25 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+              </div>
+            {% endif %}
+
+            <form method="post" action="{{ path('app_login') }}" class="mt-7 space-y-5">
+              <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+              <div>
+                <label for="inputEmail" class="text-xs uppercase tracking-[0.18em] text-white/45 font-mono">Email</label>
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" autocomplete="email" required autofocus
+                       class="mt-2 w-full rounded-xl border border-white/10 bg-ink-800/70 px-4 py-3 text-white placeholder:text-white/25 outline-none transition focus:border-omega-300/70 focus:ring-4 focus:ring-omega-400/10">
+              </div>
+
+              <div>
+                <label for="inputPassword" class="text-xs uppercase tracking-[0.18em] text-white/45 font-mono">Password</label>
+                <input type="password" name="password" id="inputPassword" autocomplete="current-password" required
+                       class="mt-2 w-full rounded-xl border border-white/10 bg-ink-800/70 px-4 py-3 text-white placeholder:text-white/25 outline-none transition focus:border-omega-300/70 focus:ring-4 focus:ring-omega-400/10">
+              </div>
+
+              <button type="submit" class="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-omega-300 to-omega-500 px-5 py-3.5 font-semibold text-ink-900 transition hover:shadow-lg hover:shadow-omega-400/30">
+                Open dashboard
+                <i data-lucide="arrow-right" class="h-4 w-4 transition group-hover:translate-x-0.5"></i>
+              </button>
+            </form>
+
+            <div class="mt-6 rounded-xl border border-white/10 bg-white/[0.025] p-4 text-sm text-white/55">
+              Users are stored in the new Doctrine-backed user table. Create the first account after running migrations.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+{% endblock %}

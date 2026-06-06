@@ -110,6 +110,33 @@ body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.nav-brand-text {
+  max-width: min(42vw, 12rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 480px) {
+  .nav-enroll {
+    width: 2.25rem;
+    padding-inline: 0;
+  }
+
+  .nav-enroll-text {
+    display: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .nav-brand-text {
+    display: none;
+  }
+
+  #langToggle {
+    padding-inline: 0.45rem;
+  }
+}
+
 /* Marquee */
 .marquee {
   position: relative;
