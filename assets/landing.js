@@ -153,6 +153,385 @@ if (navbar) {
   window.addEventListener('scroll', onFirstScroll, { passive: true });
 })();
 
+/* ---------- Mentorship lesson player shell ---------- */
+(function mentorshipLessonPlayer() {
+  const players = document.querySelectorAll('[data-lesson-player]');
+  if (!players.length) return;
+
+  const veils = [];
+
+  function setVeil(show) {
+    veils.forEach(veil => {
+      veil.classList.toggle('hidden', !show);
+      veil.classList.toggle('grid', show);
+    });
+  }
+
+  players.forEach(player => {
+    const veil = player.querySelector('[data-protection-veil]');
+    if (veil) veils.push(veil);
+
+    player.addEventListener('contextmenu', e => e.preventDefault());
+    player.addEventListener('dragstart', e => e.preventDefault());
+
+    player.querySelectorAll('[data-lesson-video]').forEach(video => {
+      video.setAttribute('controlsList', 'nodownload noplaybackrate noremoteplayback');
+      video.setAttribute('disablePictureInPicture', '');
+      video.disablePictureInPicture = true;
+      video.addEventListener('contextmenu', e => e.preventDefault());
+      video.addEventListener('dragstart', e => e.preventDefault());
+    });
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    setVeil(document.hidden);
+  });
+
+  window.addEventListener('blur', () => setVeil(true));
+  window.addEventListener('focus', () => setVeil(false));
+})();
+
+/* ---------- Mentorship phase progress ---------- */
+(function mentorshipPhaseProgress() {
+  const root = document.querySelector('[data-lesson-progress]');
+  if (!root) return;
+
+  const phaseId = root.dataset.phaseId || '01';
+  const userId = root.dataset.userId || 'guest';
+  const requiredExamples = Number(root.dataset.requiredExamples || 15);
+  const progressEndpoint = root.dataset.progressEndpoint || '';
+  const progressToken = root.dataset.progressToken || '';
+  const lessonCards = Array.from(root.querySelectorAll('[data-lesson-card]'));
+  const chartSlots = Array.from(root.querySelectorAll('[data-chart-slot]'));
+  const lessons = lessonCards.map((card, index) => ({
+    card,
+    index,
+    id: card.dataset.lessonId || '',
+    title: card.dataset.lessonTitle || '',
+    phase: card.dataset.lessonPhase || '',
+    duration: card.dataset.lessonDuration || '',
+  })).filter(lesson => lesson.id);
+  const lessonIds = lessons.map(lesson => lesson.id);
+  const chartKey = `omega.phase.${userId}.${phaseId}.chartCount`;
+
+  const videoProgressLabel = root.querySelector('[data-video-progress-label]');
+  const videoProgressSmall = root.querySelector('[data-video-progress-small]');
+  const videoProgressBar = root.querySelector('[data-video-progress-bar]');
+  const focusedTitle = root.querySelector('[data-focused-lesson-title]');
+  const focusedMeta = root.querySelector('[data-focused-lesson-meta]');
+  const focusedHeading = root.querySelector('[data-focused-lesson-heading]');
+  const focusedPhase = root.querySelector('[data-focused-lesson-phase]');
+  const focusedDuration = root.querySelector('[data-focused-lesson-duration]');
+  const focusedState = root.querySelector('[data-focused-lesson-state]');
+  const focusedReady = root.querySelector('[data-focused-lesson-ready]');
+  const focusedLocked = root.querySelector('[data-focused-lesson-locked]');
+  const focusedLockCopy = root.querySelector('[data-focused-lock-copy]');
+  const lessonVideo = root.querySelector('[data-lesson-video]');
+  const prevLessonButton = root.querySelector('[data-prev-lesson-button]');
+  const nextLessonButton = root.querySelector('[data-next-lesson-button]');
+  const lessonCompleteButton = root.querySelector('[data-lesson-complete-button]');
+  const lessonCompleteIcon = root.querySelector('[data-lesson-button-icon]');
+  const lessonCompleteLabel = root.querySelector('[data-lesson-button-label]');
+  const chartProgressLabel = root.querySelector('[data-chart-progress-label]');
+  const chartCountLabel = root.querySelector('[data-chart-count-label]');
+  const chartPercent = root.querySelector('[data-chart-percent]');
+  const chartProgressBar = root.querySelector('[data-chart-progress-bar]');
+  const chartProofGate = root.querySelector('[data-chart-proof-gate]');
+  const chartProofHelp = root.querySelector('[data-chart-proof-help]');
+  const chartProofButton = root.querySelector('[data-chart-proof-button]');
+  const chartProofButtonIcon = root.querySelector('[data-chart-proof-button-icon]');
+  const chartProofButtonLabel = root.querySelector('[data-chart-proof-button-label]');
+  const chartProofInput = root.querySelector('[data-chart-proof-input]');
+  const uploadCard = root.querySelector('[data-upload-card]');
+  const uploadIcon = root.querySelector('[data-upload-icon]');
+  const uploadIconShell = root.querySelector('[data-upload-icon-shell]');
+  const uploadTitle = root.querySelector('[data-upload-title]');
+  const uploadCopy = root.querySelector('[data-upload-copy]');
+  const assessmentStatusLabel = root.querySelector('[data-assessment-status-label]');
+  const phaseStatusLabel = root.querySelector('[data-phase-status-label]');
+
+  function readInitialCompletedLessons() {
+    try {
+      const parsed = JSON.parse(root.dataset.completedLessons || '[]');
+      return new Set(Array.isArray(parsed) ? parsed.filter(id => lessonIds.includes(id)) : []);
+    } catch {
+      return new Set();
+    }
+  }
+
+  function readChartCount() {
+    const count = Number(localStorage.getItem(chartKey) || 0);
+    if (!Number.isFinite(count)) return 0;
+    return Math.max(0, Math.min(requiredExamples, count));
+  }
+
+  let completedLessons = readInitialCompletedLessons();
+  let chartCount = readChartCount();
+  let activeIndex = 0;
+
+  function writeChartState() {
+    localStorage.setItem(chartKey, String(chartCount));
+  }
+
+  async function saveLessonCompletion(lessonId, completed) {
+    if (!progressEndpoint) return;
+
+    const response = await fetch(progressEndpoint.replace('__LESSON_ID__', encodeURIComponent(lessonId)), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+      body: JSON.stringify({
+        phase: phaseId,
+        completed,
+        _token: progressToken,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Could not save lesson progress.');
+    }
+
+    const data = await response.json();
+    const ids = Array.isArray(data.completed_lesson_ids) ? data.completed_lesson_ids : [];
+    completedLessons = new Set(ids.filter(id => lessonIds.includes(id)));
+  }
+
+  function setIcon(icon, name) {
+    if (!icon) return;
+    icon.setAttribute('data-lucide', name);
+  }
+
+  function isLessonCompleted(index) {
+    const lesson = lessons[index];
+    return Boolean(lesson && completedLessons.has(lesson.id));
+  }
+
+  function isLessonUnlocked(index) {
+    if (index <= 0) return true;
+    return lessons.slice(0, index).every(lesson => completedLessons.has(lesson.id));
+  }
+
+  function setButtonEnabled(enabled) {
+    if (!chartProofButton || !chartProofInput) return;
+
+    chartProofButton.disabled = !enabled;
+    chartProofInput.disabled = !enabled;
+    chartProofButton.classList.toggle('cursor-not-allowed', !enabled);
+    chartProofButton.classList.toggle('text-white/35', !enabled);
+    chartProofButton.classList.toggle('text-ink-900', enabled);
+    chartProofButton.classList.toggle('bg-white/[0.04]', !enabled);
+    chartProofButton.classList.toggle('bg-omega-300', enabled);
+    chartProofButton.classList.toggle('hover:bg-omega-200', enabled);
+    setIcon(chartProofButtonIcon, enabled ? 'upload-cloud' : 'lock');
+    if (chartProofButtonLabel) chartProofButtonLabel.textContent = enabled ? 'Upload chart examples' : 'Complete videos first';
+  }
+
+  function setFocusedLesson(index) {
+    activeIndex = Math.max(0, Math.min(index, lessons.length - 1));
+    render();
+  }
+
+  function render() {
+    const totalLessons = lessons.length;
+    const completedCount = completedLessons.size;
+    const videoPercent = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
+    const videosComplete = totalLessons > 0 && completedCount === totalLessons;
+    const chartPercentValue = Math.round((chartCount / requiredExamples) * 100);
+    const chartsComplete = chartCount >= requiredExamples;
+    const activeLesson = lessons[activeIndex] || lessons[0];
+    const activeUnlocked = isLessonUnlocked(activeIndex);
+    const activeCompleted = isLessonCompleted(activeIndex);
+
+    if (videoProgressLabel) videoProgressLabel.textContent = `${completedCount} / ${totalLessons}`;
+    if (videoProgressSmall) videoProgressSmall.textContent = `${videoPercent}%`;
+    if (videoProgressBar) videoProgressBar.style.width = `${videoPercent}%`;
+    if (focusedTitle) focusedTitle.textContent = activeLesson ? activeLesson.title : '';
+    if (focusedHeading) focusedHeading.textContent = activeLesson ? activeLesson.title : '';
+    if (focusedMeta) focusedMeta.textContent = activeLesson ? `${activeLesson.phase} / ${activeLesson.duration}` : '';
+    if (focusedPhase) focusedPhase.textContent = activeLesson ? activeLesson.phase : '';
+    if (focusedDuration) focusedDuration.textContent = activeLesson ? activeLesson.duration : '';
+    if (focusedState) {
+      focusedState.textContent = activeCompleted ? 'Completed' : activeUnlocked ? 'Not finished' : 'Locked';
+      focusedState.classList.toggle('text-omega-300', activeCompleted);
+      focusedState.classList.toggle('text-white/38', !activeCompleted);
+    }
+    if (focusedReady) focusedReady.classList.toggle('hidden', !activeUnlocked);
+    if (focusedLocked) {
+      focusedLocked.classList.toggle('hidden', activeUnlocked);
+      focusedLocked.classList.toggle('grid', !activeUnlocked);
+    }
+    if (focusedLockCopy) {
+      focusedLockCopy.textContent = activeIndex === 0
+        ? 'This lesson is available now.'
+        : 'Mark the previous video finished to unlock this lesson.';
+    }
+    if (lessonVideo) {
+      lessonVideo.toggleAttribute('controls', activeUnlocked);
+      lessonVideo.style.pointerEvents = activeUnlocked ? '' : 'none';
+    }
+    if (prevLessonButton) {
+      prevLessonButton.disabled = activeIndex === 0;
+      prevLessonButton.classList.toggle('cursor-not-allowed', activeIndex === 0);
+      prevLessonButton.classList.toggle('opacity-45', activeIndex === 0);
+    }
+    if (nextLessonButton) {
+      nextLessonButton.disabled = activeIndex >= totalLessons - 1;
+      nextLessonButton.classList.toggle('cursor-not-allowed', activeIndex >= totalLessons - 1);
+      nextLessonButton.classList.toggle('opacity-45', activeIndex >= totalLessons - 1);
+    }
+    if (lessonCompleteButton) {
+      lessonCompleteButton.disabled = !activeUnlocked || activeCompleted;
+      lessonCompleteButton.classList.toggle('cursor-not-allowed', !activeUnlocked || activeCompleted);
+      lessonCompleteButton.classList.toggle('bg-omega-300', activeCompleted);
+      lessonCompleteButton.classList.toggle('text-ink-900', activeCompleted);
+      lessonCompleteButton.classList.toggle('border-omega-300', activeCompleted);
+      lessonCompleteButton.classList.toggle('bg-white/[0.04]', !activeCompleted);
+      lessonCompleteButton.classList.toggle('text-white/70', !activeCompleted);
+      setIcon(lessonCompleteIcon, activeCompleted ? 'check-circle-2' : activeUnlocked ? 'circle' : 'lock');
+      if (lessonCompleteLabel) {
+        lessonCompleteLabel.textContent = activeCompleted ? 'Completed' : activeUnlocked ? 'Mark finished' : 'Locked';
+      }
+    }
+    if (chartProgressLabel) chartProgressLabel.textContent = `${chartCount} / ${requiredExamples}`;
+    if (chartCountLabel) chartCountLabel.textContent = `${chartCount} / ${requiredExamples}`;
+    if (chartPercent) chartPercent.textContent = `${chartPercentValue}%`;
+    if (chartProgressBar) chartProgressBar.style.width = `${chartPercentValue}%`;
+    if (assessmentStatusLabel) assessmentStatusLabel.textContent = chartsComplete ? 'Ready' : 'Pending';
+    if (phaseStatusLabel) phaseStatusLabel.textContent = chartsComplete ? 'Assessment' : 'Locked';
+
+    setButtonEnabled(videosComplete);
+
+    if (chartProofGate) chartProofGate.classList.toggle('is-unlocked', videosComplete);
+    if (chartProofHelp) {
+      chartProofHelp.textContent = videosComplete
+        ? 'Chart proof is unlocked. Select 15 annotated examples for this phase.'
+        : 'Complete all phase videos to unlock the chart-example upload step.';
+    }
+    if (uploadCard) {
+      uploadCard.classList.toggle('border-omega-400/25', videosComplete);
+      uploadCard.classList.toggle('bg-omega-500/[0.035]', videosComplete);
+      uploadCard.classList.toggle('border-white/15', !videosComplete);
+      uploadCard.classList.toggle('bg-white/[0.025]', !videosComplete);
+    }
+    if (uploadIconShell) {
+      uploadIconShell.classList.toggle('border-omega-400/25', videosComplete);
+      uploadIconShell.classList.toggle('bg-omega-500/10', videosComplete);
+      uploadIconShell.classList.toggle('text-omega-300', videosComplete);
+      uploadIconShell.classList.toggle('border-white/10', !videosComplete);
+      uploadIconShell.classList.toggle('bg-white/[0.04]', !videosComplete);
+      uploadIconShell.classList.toggle('text-white/35', !videosComplete);
+    }
+    setIcon(uploadIcon, videosComplete ? 'upload-cloud' : 'lock');
+    if (uploadTitle) uploadTitle.textContent = videosComplete ? 'Upload is open' : 'Locked until videos are done';
+    if (uploadCopy) {
+      uploadCopy.textContent = videosComplete
+        ? 'Choose your annotated chart screenshots. This UI tracks the count until the real upload endpoint is added.'
+        : 'The upload step opens automatically after every lesson has been marked completed.';
+    }
+
+    lessons.forEach(lesson => {
+      const card = lesson.card;
+      const done = completedLessons.has(lesson.id);
+      const unlocked = isLessonUnlocked(lesson.index);
+      const active = lesson.index === activeIndex;
+      const state = card.querySelector('[data-lesson-state-label]');
+      const tabIcon = card.querySelector('[data-lesson-tab-icon]');
+      const tabShell = card.querySelector('[data-lesson-tab-icon-shell]');
+
+      card.classList.toggle('border-omega-400/30', active || done);
+      card.classList.toggle('bg-omega-500/10', active || done);
+      card.classList.toggle('bg-white/[0.025]', !active && !done);
+      card.classList.toggle('opacity-55', !unlocked && !active);
+      card.classList.toggle('is-complete', done);
+      if (state) {
+        state.textContent = done ? 'Completed' : unlocked ? active ? 'Current' : 'Available' : 'Locked';
+        state.classList.toggle('text-omega-300', done);
+      }
+      setIcon(tabIcon, done ? 'check-circle-2' : unlocked ? active ? 'play-circle' : 'circle' : 'lock');
+      if (tabShell) {
+        tabShell.classList.toggle('bg-omega-300', done);
+        tabShell.classList.toggle('text-ink-900', done);
+        tabShell.classList.toggle('bg-omega-500/10', unlocked && !done);
+        tabShell.classList.toggle('text-omega-300', unlocked && !done);
+        tabShell.classList.toggle('bg-ink-900', !unlocked && !done);
+        tabShell.classList.toggle('text-white/45', !unlocked && !done);
+      }
+    });
+
+    chartSlots.forEach((slot, index) => {
+      const filled = index < chartCount;
+      slot.classList.toggle('border-omega-400/30', filled);
+      slot.classList.toggle('bg-omega-500/10', filled);
+      slot.classList.toggle('text-omega-200', filled);
+      slot.classList.toggle('border-white/10', !filled);
+      slot.classList.toggle('bg-white/[0.035]', !filled);
+      slot.classList.toggle('text-white/35', !filled);
+    });
+
+    if (window.lucide) lucide.createIcons();
+  }
+
+  lessons.forEach(lesson => {
+    lesson.card.addEventListener('click', () => {
+      setFocusedLesson(lesson.index);
+    });
+  });
+
+  if (prevLessonButton) {
+    prevLessonButton.addEventListener('click', () => {
+      if (activeIndex > 0) setFocusedLesson(activeIndex - 1);
+    });
+  }
+
+  if (nextLessonButton) {
+    nextLessonButton.addEventListener('click', () => {
+      if (activeIndex < lessons.length - 1) setFocusedLesson(activeIndex + 1);
+    });
+  }
+
+  if (lessonCompleteButton) {
+    lessonCompleteButton.addEventListener('click', async () => {
+      const lesson = lessons[activeIndex];
+      if (!lesson || !isLessonUnlocked(activeIndex) || isLessonCompleted(activeIndex)) return;
+
+      const previousCompleted = new Set(completedLessons);
+
+      lessonCompleteButton.disabled = true;
+      completedLessons.add(lesson.id);
+      render();
+
+      try {
+        await saveLessonCompletion(lesson.id, true);
+        if (activeIndex < lessons.length - 1) {
+          setFocusedLesson(activeIndex + 1);
+        }
+      } catch {
+        completedLessons = previousCompleted;
+      } finally {
+        lessonCompleteButton.disabled = false;
+        render();
+      }
+    });
+  }
+
+  if (chartProofButton && chartProofInput) {
+    chartProofButton.addEventListener('click', () => {
+      if (chartProofButton.disabled) return;
+      chartProofInput.click();
+    });
+
+    chartProofInput.addEventListener('change', () => {
+      chartCount = Math.min(requiredExamples, chartProofInput.files ? chartProofInput.files.length : 0);
+      writeChartState();
+      render();
+    });
+  }
+
+  render();
+})();
+
 /* ---------- Before / After image comparison slider ---------- */
 (function compareSlider() {
   const slider = document.getElementById('compareSlider');

@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block page_key %}dashboard{% endblock %}
+
+{% block body %}
+  {% set active_nav = active_nav|default('lessons') %}
+
+  <main class="omega-dashboard min-h-screen">
+    <aside class="dashboard-sidebar fixed inset-y-0 left-0 z-40 hidden w-72 border-r border-white/10 bg-ink-900/94 backdrop-blur-xl lg:flex lg:flex-col">
+      <div class="flex h-16 items-center gap-3 border-b border-white/10 px-5">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-omega-300 to-omega-600 shadow-lg shadow-omega-500/25">
+          <span class="font-display font-bold text-ink-900">&Omega;</span>
+        </span>
+        <div>
+          <div class="font-display font-semibold leading-tight">Omega Sequence</div>
+          <div class="font-mono text-[11px] uppercase tracking-[0.18em] text-white/35">Mentorship</div>
+        </div>
+      </div>
+
+      <nav class="flex-1 space-y-1 px-3 py-5 text-sm">
+        <a href="{{ path('app_dashboard') }}" class="flex items-center gap-3 rounded-xl px-3 py-2.5 transition {{ active_nav == 'lessons' ? 'bg-omega-500/10 text-omega-200 ring-1 ring-omega-400/20' : 'text-white/60 hover:bg-white/[0.05] hover:text-white' }}">
+          <i data-lucide="play-square" class="h-4 w-4"></i>
+          Videos & chart proof
+        </a>
+        <a href="{{ path('app_dashboard_route_path') }}" class="flex items-center gap-3 rounded-xl px-3 py-2.5 transition {{ active_nav == 'route' ? 'bg-omega-500/10 text-omega-200 ring-1 ring-omega-400/20' : 'text-white/60 hover:bg-white/[0.05] hover:text-white' }}">
+          <i data-lucide="route" class="h-4 w-4"></i>
+          Route path
+        </a>
+        <a href="{{ path('app_dashboard') }}#assessment" class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-white/45 transition hover:bg-white/[0.05] hover:text-white">
+          <i data-lucide="badge-help" class="h-4 w-4"></i>
+          Phase assessment
+          <span class="ml-auto rounded-full border border-white/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-white/35">Soon</span>
+        </a>
+      </nav>
+
+      <div class="border-t border-white/10 p-4">
+        <div class="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
+          <div class="flex items-center gap-3">
+            <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-omega-500/10 text-omega-300 ring-1 ring-omega-400/20">
+              <i data-lucide="user-round" class="h-4 w-4"></i>
+            </span>
+            <div class="min-w-0">
+              <div class="truncate text-sm font-medium">{{ app.user.preferredName }}</div>
+              <div class="truncate text-xs text-white/40">{{ app.user.email }}</div>
+            </div>
+          </div>
+          <a href="{{ path('app_logout') }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-sm text-white/65 transition hover:bg-white/[0.06] hover:text-white">
+            <i data-lucide="log-out" class="h-4 w-4"></i>
+            Logout
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <div class="lg:pl-72">
+      <header class="sticky top-0 z-30 border-b border-white/10 bg-ink-900/86 backdrop-blur-xl">
+        <div class="flex min-h-16 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+          <div class="flex min-w-0 items-center gap-3">
+            <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-omega-300 to-omega-600 text-ink-900 lg:hidden">
+              <span class="font-display font-bold">&Omega;</span>
+            </span>
+            <div class="min-w-0">
+              <div class="font-display text-sm font-semibold sm:text-base lg:hidden">Omega Mentorship</div>
+              <div class="hidden font-mono text-xs uppercase tracking-[0.2em] text-white/35 lg:block">Student workspace</div>
+              <div class="truncate text-xs text-white/50 sm:text-sm lg:mt-1">Current phase: {{ current_phase.title }}</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span class="hidden items-center gap-2 rounded-full border border-omega-400/25 bg-omega-500/10 px-3 py-2 font-mono text-xs text-omega-200 sm:inline-flex">
+              <i data-lucide="shield-check" class="h-3.5 w-3.5"></i>
+              {{ app.user.membershipTier|title }}
+            </span>
+            <a href="{{ path('landing') }}" class="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-3 text-sm text-white/70 transition hover:bg-white/[0.08] hover:text-white">
+              <i data-lucide="home" class="h-4 w-4"></i>
+              <span class="hidden sm:inline">Site</span>
+            </a>
+          </div>
+        </div>
+
+        <nav class="flex gap-2 overflow-x-auto border-t border-white/[0.08] px-4 py-2 text-xs sm:px-6 lg:hidden">
+          <a href="{{ path('app_dashboard') }}" class="inline-flex shrink-0 items-center gap-2 rounded-full border px-3 py-2 {{ active_nav == 'lessons' ? 'border-omega-400/20 bg-omega-500/10 text-omega-100' : 'border-white/10 bg-white/[0.04] text-white/65' }}">
+            <i data-lucide="play-square" class="h-3.5 w-3.5"></i>
+            Videos
+          </a>
+          <a href="{{ path('app_dashboard_route_path') }}" class="inline-flex shrink-0 items-center gap-2 rounded-full border px-3 py-2 {{ active_nav == 'route' ? 'border-omega-400/20 bg-omega-500/10 text-omega-100' : 'border-white/10 bg-white/[0.04] text-white/65' }}">
+            <i data-lucide="route" class="h-3.5 w-3.5"></i>
+            Path
+          </a>
+          <a href="{{ path('app_dashboard') }}#chart-proof" class="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-white/65">
+            <i data-lucide="upload-cloud" class="h-3.5 w-3.5"></i>
+            Proof
+          </a>
+          <a href="{{ path('app_dashboard') }}#assessment" class="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-white/65">
+            <i data-lucide="badge-help" class="h-3.5 w-3.5"></i>
+            Assessment
+          </a>
+        </nav>
+      </header>
+
+      <div class="px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        {% block dashboard_content %}{% endblock %}
+      </div>
+    </div>
+  </main>
+{% endblock %}

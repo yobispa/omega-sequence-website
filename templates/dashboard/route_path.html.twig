@@ -1,0 +1,122 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Route Path | Omega Sequence{% endblock %}
+
+{% block dashboard_content %}
+  <section class="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
+    <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-2xl shadow-black/25">
+      <span class="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-omega-300">
+        <i data-lucide="route" class="h-3.5 w-3.5"></i>
+        Route path
+      </span>
+      <h1 class="mt-4 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
+        Your Omega journey map.
+      </h1>
+      <p class="mt-4 max-w-2xl text-sm leading-relaxed text-white/55 sm:text-base">
+        Each phase opens after the previous phase has all videos completed, 15 chart examples uploaded, and the phase assessment passed.
+      </p>
+    </div>
+
+    <div class="grid gap-3 sm:grid-cols-3 xl:grid-cols-3">
+      <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-4 shadow-xl shadow-black/20">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-omega-400/20 bg-omega-500/10 text-omega-300">
+          <i data-lucide="play-circle" class="h-4 w-4"></i>
+        </span>
+        <div class="mt-4 font-display text-2xl font-semibold">1</div>
+        <div class="mt-1 text-sm font-medium text-white/80">Videos</div>
+      </article>
+      <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-4 shadow-xl shadow-black/20">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-omega-400/20 bg-omega-500/10 text-omega-300">
+          <i data-lucide="images" class="h-4 w-4"></i>
+        </span>
+        <div class="mt-4 font-display text-2xl font-semibold">15</div>
+        <div class="mt-1 text-sm font-medium text-white/80">Charts</div>
+      </article>
+      <article class="rounded-2xl border border-white/10 bg-white/[0.03] p-4 shadow-xl shadow-black/20">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-omega-400/20 bg-omega-500/10 text-omega-300">
+          <i data-lucide="badge-help" class="h-4 w-4"></i>
+        </span>
+        <div class="mt-4 font-display text-2xl font-semibold">Pass</div>
+        <div class="mt-1 text-sm font-medium text-white/80">Assessment</div>
+      </article>
+    </div>
+  </section>
+
+  <section class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-2xl shadow-black/25">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <span class="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-omega-300">
+          <i data-lucide="map" class="h-3.5 w-3.5"></i>
+          Phase timeline
+        </span>
+        <h2 class="mt-2 font-display text-2xl font-semibold">Structured progress</h2>
+      </div>
+      <a href="{{ path('app_dashboard') }}" class="inline-flex w-fit items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-medium text-white/70 transition hover:bg-white/[0.08] hover:text-white">
+        <i data-lucide="play-square" class="h-4 w-4"></i>
+        Back to videos
+      </a>
+    </div>
+
+    <div class="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      {% for phase in phases %}
+        {% set active = phase.status == 'active' %}
+        {% set progress = phase.examples_required > 0 ? (phase.examples_uploaded / phase.examples_required * 100) : 0 %}
+        <article class="relative overflow-hidden rounded-2xl border p-4 {{ active ? 'border-omega-400/30 bg-omega-500/10 shadow-xl shadow-omega-500/10' : 'border-white/10 bg-ink-800/45' }}">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl {{ active ? 'bg-omega-300 text-ink-900' : 'bg-white/[0.045] text-white/45 ring-1 ring-white/10' }}">
+                <i data-lucide="{{ phase.icon }}" class="h-5 w-5"></i>
+              </span>
+              <div>
+                <div class="font-mono text-xs uppercase tracking-[0.18em] {{ active ? 'text-omega-200' : 'text-white/35' }}">Phase {{ phase.number }}</div>
+                <h3 class="mt-1 font-display text-lg font-semibold">{{ phase.title }}</h3>
+              </div>
+            </div>
+            <span class="rounded-full border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider {{ active ? 'border-omega-400/25 bg-omega-500/10 text-omega-200' : 'border-white/10 text-white/35' }}">
+              {{ active ? 'Active' : 'Locked' }}
+            </span>
+          </div>
+
+          <p class="mt-4 min-h-[3rem] text-sm leading-relaxed text-white/50">{{ phase.summary }}</p>
+
+          <div class="mt-5 grid grid-cols-3 gap-3 text-sm">
+            <div class="rounded-xl border border-white/10 bg-black/[0.16] p-3">
+              <div class="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">Videos</div>
+              <div class="mt-1 font-display text-lg font-semibold">{{ phase.lessons }}</div>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-black/[0.16] p-3">
+              <div class="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">Charts</div>
+              <div class="mt-1 font-display text-lg font-semibold">{{ phase.examples_required }}</div>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-black/[0.16] p-3">
+              <div class="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">Quiz</div>
+              <div class="mt-1 font-display text-lg font-semibold">{{ phase.assessment }}</div>
+            </div>
+          </div>
+
+          <div class="mt-5">
+            <div class="flex items-center justify-between font-mono text-xs text-white/40">
+              <span>Chart examples</span>
+              <span>{{ phase.examples_uploaded }} / {{ phase.examples_required }}</span>
+            </div>
+            <div class="mt-2 h-2 overflow-hidden rounded-full bg-white/[0.07]">
+              <div class="h-full rounded-full bg-gradient-to-r from-omega-300 to-omega-600" style="width: {{ progress }}%"></div>
+            </div>
+          </div>
+
+          {% if active %}
+            <a href="{{ path('app_dashboard') }}" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-omega-300 px-4 py-2.5 text-sm font-semibold text-ink-900 transition hover:bg-omega-200">
+              Continue phase
+              <i data-lucide="arrow-right" class="h-4 w-4"></i>
+            </a>
+          {% else %}
+            <div class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/[0.035] px-4 py-2.5 text-sm text-white/35">
+              <i data-lucide="lock" class="h-4 w-4"></i>
+              Complete previous phase
+            </div>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

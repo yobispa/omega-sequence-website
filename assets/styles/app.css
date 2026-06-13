@@ -322,6 +322,27 @@ body {
   .compare-handle { width: 44px; height: 44px; }
 }
 
+/* =========================================
+   Mentorship lesson player shell
+   ========================================= */
+.lesson-player,
+.lesson-player * {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.lesson-player video {
+  -webkit-user-drag: none;
+}
+
+.lesson-player [data-protection-veil] {
+  z-index: 20;
+}
+
+[data-lesson-card].is-complete {
+  box-shadow: 0 16px 48px -30px rgba(30, 229, 156, 0.55);
+}
+
 /* Highlight gradient text rendering fix */
 .bg-clip-text {
   -webkit-background-clip: text;
